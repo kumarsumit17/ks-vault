@@ -1,6 +1,6 @@
 # KS Vault
 
-> Part of the [KS-Suite](../README.md).
+> Part of the [KS-Suite](https://github.com/kumarsumit17/KS-Suite).
 
 A private, fully offline vault and notekeeper protected by pattern/password authentication. Stores notes, government IDs, and tickets encrypted on-device with no network access.
 
@@ -20,7 +20,7 @@ cd ks-vault
 ## Release
 
 Releases are cut by pushing a semantic version tag (`git tag v1.2.3 && git push --tags`).
-See the suite-level [CI/CD guide](../README.md#-cicd-semantic-versioning--automated-signing).
+See the suite-level [CI/CD guide](https://github.com/kumarsumit17/KS-Suite#-cicd-semantic-versioning--automated-signing).
 
 ## License
 
