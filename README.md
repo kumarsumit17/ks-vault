@@ -1,0 +1,27 @@
+# KS Vault
+
+> Part of the [KS-Suite](../README.md).
+
+A private, fully offline vault and notekeeper protected by pattern/password authentication. Stores notes, government IDs, and tickets encrypted on-device with no network access.
+
+| | |
+|---|---|
+| **Platform** | Android |
+| **Tech stack** | Kotlin, Jetpack Compose, Room + SQLCipher, Android Keystore, BiometricPrompt |
+
+## Getting started
+
+```bash
+git clone <repo-url> ks-vault
+cd ks-vault
+./gradlew assembleDebug
+```
+
+## Release
+
+Releases are cut by pushing a semantic version tag (`git tag v1.2.3 && git push --tags`).
+See the suite-level [CI/CD guide](../README.md#-cicd-semantic-versioning--automated-signing).
+
+## License
+
+MIT. See [LICENSE](LICENSE).
