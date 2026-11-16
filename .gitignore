@@ -1,0 +1,48 @@
+# ---- Build output ----
+build/
+**/build/
+out/
+bin/
+gen/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# ---- Gradle ----
+.gradle/
+**/.gradle/
+.kotlin/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+
+# ---- Local config ----
+local.properties
+.env
+.env.*
+
+# ---- Signing / keystores (NEVER commit) ----
+keystore.properties
+*.jks
+*.keystore
+*.p12
+*.pem
+google-services.json
+
+# ---- IDE ----
+.idea/
+*.iml
+.vscode/
+.fleet/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Logs ----
+*.log
