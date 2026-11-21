@@ -1,0 +1,3 @@
+[submodule "ks-utility"]
+	path = ks-utility
+	url = https://github.com/kumarsumit17/ks-utility.git

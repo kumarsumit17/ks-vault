@@ -17,3 +17,4 @@ Third-party dependencies are kept to the minimum.
 - No analytics, crash-reporting or ad SDKs, ever.
 - Libraries named in the other specs are candidates, not commitments. Justify each at the stage that first needs it.
 - Every new dependency is reported with the reason it is needed and what it adds to the dependency tree (`./gradlew :app:dependencies`), and recorded in `specs/log.md` in the same commit.
+- `ks-utility`, the suite's own generic utilities, is a dependency of this app: a git submodule at `ks-utility/`, pinned to a commit and included as a Gradle build (`com.ks:utility`). It is first-party and has no third-party dependencies. Generic helpers go there; application-specific code stays here. How it is wired: `ks-utility/specs/usage.md`.
