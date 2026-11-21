@@ -12,7 +12,7 @@ A private, fully offline vault and notekeeper protected by pattern/password auth
 ## Getting started
 
 ```bash
-git clone <repo-url> ks-vault
+git clone --recurse-submodules <repo-url> ks-vault
 cd ks-vault
 ./gradlew assembleDebug
 ```
