@@ -34,6 +34,13 @@ Private, fully offline vault and notekeeper for notes, government IDs, and ticke
 ./gradlew :app:processReleaseManifest && grep -i "permission" app/build/intermediates/merged_manifests/release/*/AndroidManifest.xml   # verify no INTERNET
 ```
 
+## Platform folders
+- Every KS-Suite app repo has the same top-level platform folders: `tv/google-tv/`, `desktop/mac/`, `desktop/windows/`, `mobile/android/` and `mobile/ios/`. All five exist in every app repo, whether or not the app supports that platform yet.
+- This app targets `mobile/android`. The other folders are empty on purpose (a `.gitkeep` only): they mark where that platform's code would go, not missing work. Do not add code for a platform that is not a target without the owner asking.
+- Code for one platform goes in that platform's folder. Code used by more than one platform stays in one shared place and is never copied between platform folders.
+- The skeleton still has `app/` in the repository root. When the Gradle build is created, the app module goes in `mobile/android/`.
+- Never rename, merge or remove these folders, and never add another top-level platform folder; the layout is a suite-wide rule.
+
 ## Shared code (`ks-utility`)
 - Generic utility code shared across the KS-Suite apps lives in the `ks-utility` repository. It is a dependency of this app: a git submodule at `ks-utility/`, pinned to a commit. After cloning, run `git submodule update --init`.
 - Before writing a generic helper (one that knows nothing about this app), look in `ks-utility/kotlin` and use it from there. If it is missing and another app would need it too, add it in the `ks-utility` repository, not here. Application-specific logic stays in this repo.
