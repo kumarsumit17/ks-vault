@@ -34,6 +34,13 @@ Private, fully offline vault and notekeeper for notes, government IDs, and ticke
 ./gradlew :app:processReleaseManifest && grep -i "permission" app/build/intermediates/merged_manifests/release/*/AndroidManifest.xml   # verify no INTERNET
 ```
 
+Emulators (from the KS-Suite workspace; suite spec `specs/testing.md`): `../scripts/emulators.sh create` once, then `../scripts/emulators.sh start phone` boots the phone AVD (`ks-phone-36`, API 36). Then:
+```bash
+export ANDROID_SERIAL=$(../scripts/emulators.sh serial phone)
+./gradlew installDebug connectedDebugAndroidTest
+adb shell monkey -p com.ks.vault -c android.intent.category.LAUNCHER 1   # open it (use the debug package if it has a suffix)
+```
+
 ## Platform folders
 - Every KS-Suite app repo has the same top-level platform folders: `tv/google-tv/`, `desktop/mac/`, `desktop/windows/`, `mobile/android/` and `mobile/ios/`. All five exist in every app repo, whether or not the app supports that platform yet.
 - This app targets `mobile/android`. The other folders are empty on purpose (a `.gitkeep` only): they mark where that platform's code would go, not missing work. Do not add code for a platform that is not a target without the owner asking.
