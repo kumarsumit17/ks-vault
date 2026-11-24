@@ -21,4 +21,4 @@ A private, fully offline vault and notekeeper protected by pattern/password auth
 - Package: `com.ks.vault`. Features: `auth/`, `crypto/`, `notes/`, `documents/`
 - minSdk 26 · targetSdk latest stable
 
-The app is planned: this repository holds the project structure and its rules, with app code still to come.
+The first version (stage 1 of the [Build plan](plan.md)) is built: the Gradle build is in `mobile/android/` (Gradle path `:mobile:android`).

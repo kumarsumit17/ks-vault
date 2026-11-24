@@ -25,34 +25,35 @@ Private, fully offline vault and notekeeper for notes, government IDs, and ticke
 - Before changing anything in `auth/` or `crypto/`, explain the change and the threat it addresses.
 
 ## Commands
+Screenshots of the app are black (`FLAG_SECURE`); read the screen with `adb shell uiautomator dump` instead.
 ```bash
 ./gradlew assembleDebug
 ./gradlew installDebug
 ./gradlew testDebugUnitTest             # crypto + auth unit tests must pass
 ./gradlew connectedDebugAndroidTest     # Keystore behaviour needs a real device / emulator
 ./gradlew lintDebug
-./gradlew :app:processReleaseManifest && grep -i "permission" app/build/intermediates/merged_manifests/release/*/AndroidManifest.xml   # verify no INTERNET
+./gradlew checkReleaseNoNetwork            # fails if the merged release manifest asks for network access (also part of check, assemble and bundle)
 ```
 
 Emulators (from the KS-Suite workspace; suite spec `specs/testing.md`): `../scripts/emulators.sh create` once, then `../scripts/emulators.sh start phone` boots the phone AVD (`ks-phone-36`, API 36). Then:
 ```bash
-export ANDROID_SERIAL=$(../scripts/emulators.sh serial phone)
+export ANDROID_SERIAL=$(../scripts/emulators.sh serial phone)   # always set it: without it installDebug installs on every running emulator
 ./gradlew installDebug connectedDebugAndroidTest
-adb shell monkey -p com.ks.vault -c android.intent.category.LAUNCHER 1   # open it (use the debug package if it has a suffix)
+adb shell monkey -p com.ks.vault -c android.intent.category.LAUNCHER 1   # open it (the debug build uses the same package)
 ```
 
 ## Platform folders
 - Every KS-Suite app repo has the same top-level platform folders: `tv/google-tv/`, `desktop/mac/`, `desktop/windows/`, `mobile/android/` and `mobile/ios/`. All five exist in every app repo, whether or not the app supports that platform yet.
 - This app targets `mobile/android`. The other folders are empty on purpose (a `.gitkeep` only): they mark where that platform's code would go, not missing work. Do not add code for a platform that is not a target without the owner asking.
 - Three layers, narrowest first: a platform folder holds code for one platform of this app; `shared/` in the repository root holds code used by two or more platforms of this app, written once and never copied between platform folders; `ks-utility` holds generic code used by several apps. This app has one target, so it has no `shared/` folder.
-- The skeleton still has `app/` in the repository root. When the Gradle build is created, the app module goes in `mobile/android/`.
+- The app module is in `mobile/android/` (Gradle path `:mobile:android`).
 - Never rename, merge or remove these folders, and never add another top-level platform folder; the layout is a suite-wide rule.
 
 ## Shared code (`ks-utility`)
 - Generic utility code shared across the KS-Suite apps lives in the `ks-utility` repository. It is a dependency of this app: a git submodule at `ks-utility/`, pinned to a commit. After cloning, run `git submodule update --init`.
 - Before writing a generic helper (one that knows nothing about this app), look in `ks-utility/kotlin` and use it from there. If it is missing and another app would need it too, add it in the `ks-utility` repository, not here. Application-specific logic stays in this repo.
 - Never edit files under `ks-utility/` from this repo. Change them in the `ks-utility` repository, then move the pin: `git -C ks-utility fetch && git -C ks-utility checkout <commit>`, and commit the changed `ks-utility` entry.
-- Gradle wiring, to add when this repo's Gradle build is created: `includeBuild("ks-utility/kotlin")` in `settings.gradle.kts`, `ks-utility = { module = "com.ks:utility" }` in `gradle/libs.versions.toml`, and `implementation(libs.ks.utility)` in the module that uses it. It is a plain Kotlin/JVM library with no Android SDK.
+- Gradle wiring: `includeBuild("ks-utility/kotlin")` in `settings.gradle.kts`, `ks-utility = { module = "com.ks:utility" }` in `gradle/libs.versions.toml`, and `implementation(libs.ks.utility)` in `mobile/android`. It is a plain Kotlin/JVM library with no Android SDK. The English and Hindi text is in `mobile/android/src/main/lang/`; the ks-utility tool turns it into string resources before each build (needs Node 23.6+).
 - `ks-utility` has no network code and no third-party dependencies, so it keeps the security constraints above. Check that again whenever the pin moves.
 - CI checks out with `submodules: true` (`.github/workflows/release.yml`).
 

@@ -49,3 +49,7 @@ desktop.ini
 
 # ---- graphify: generated output ----
 graphify-out/
+
+# ---- Generated from the language files (ks-utility lang.mjs) ----
+mobile/android/src/main/res/values/lang_strings.xml
+mobile/android/src/main/res/values-hi/lang_strings.xml

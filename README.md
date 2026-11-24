@@ -7,15 +7,18 @@ A private, fully offline vault and notekeeper protected by pattern/password auth
 | | |
 |---|---|
 | **Platform** | Android |
-| **Tech stack** | Kotlin, Jetpack Compose, Room + SQLCipher, Android Keystore, BiometricPrompt |
+| **Tech stack** | Kotlin, Jetpack Compose, Room + SQLCipher, Android Keystore |
 
 ## Getting started
 
 ```bash
 git clone --recurse-submodules <repo-url> ks-vault
 cd ks-vault
-./gradlew assembleDebug
+./gradlew assembleDebug          # mobile/android/build/outputs/apk/debug/
+./gradlew check                  # unit tests, lint, language files, no-network check
 ```
+
+Needs JDK 17, the Android SDK (compile SDK 37) and Node 23.6+ (for the ks-utility language tool). The plan and the security design are in [specs/plan.md](specs/plan.md).
 
 ## Release
 

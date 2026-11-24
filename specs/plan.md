@@ -86,7 +86,7 @@ Through ks-utility, as every suite app ([languages](https://github.com/kumarsumi
 ## Code layout
 
 - The Gradle build goes in `mobile/android/` (Gradle path `:mobile:android`); the root `app/` skeleton is removed. No `shared/` folder (one target).
-- Packages under `com.ks.vault`: `auth/` (setup, unlock, lockout, auto-lock), `crypto/` (key derivation, Keystore, file encryption), `data/` (Room database, entities), `notes/` and `documents/` (screens for notes, and for IDs and tickets), `settings/`, `ui/` (theme, pattern pad, shared pieces).
+- Packages under `com.ks.vault`: `auth/` (setup, unlock, lockout, auto-lock), `crypto/` (key derivation, Keystore, file encryption), `data/` (Room database, entities), `notes/` (the item list, detail and editor screens, for every kind), `documents/` (attachments: import, thumbnails, viewer), `settings/`, `ui/` (theme, pattern pad, navigation, shared pieces).
 - One activity, Jetpack Compose screens, simple state holders without a dependency-injection library.
 
 ## Libraries and licences
@@ -96,7 +96,7 @@ Every one is checked against the merged manifest for network permissions when it
 | Library | For | Licence | Stage |
 |---|---|---|---|
 | Kotlin standard library, coroutines | language | Apache-2.0 | 1 |
-| AndroidX Activity Compose, Compose UI, Foundation, Material 3 | interface | Apache-2.0 | 1 |
+| AndroidX Activity Compose, Compose UI, Foundation, Material 3, Material Icons (core) | interface | Apache-2.0 | 1 |
 | AndroidX AppCompat | per-app language before Android 13 | Apache-2.0 | 1 |
 | AndroidX Lifecycle (process, runtime-compose) | auto-lock on background | Apache-2.0 | 1 |
 | AndroidX Room (runtime; compiler through KSP at build time) | database | Apache-2.0 | 1 |
@@ -111,7 +111,7 @@ Not used: no Argon2 library (PBKDF2 is built into Android; the Keystore layer al
 
 ## Roadmap
 
-**Stage 1 — first version** (the minimal app to approve and test):
+**Stage 1 — first version** (the minimal app to approve and test). **Built and tested on `dev`, 2026-11-24** ([status](#stage-1-status)):
 
 1. Gradle build in `mobile/android`, ks-utility `v0.6.0`, language files, the no-network build check, FLAG_SECURE, backups off, R8 log stripping.
 2. `crypto/` and `auth/`: set up with password or pattern, unlock, escalating lockout, auto-lock (background and idle), change secret.
@@ -125,6 +125,21 @@ Not used: no Argon2 library (PBKDF2 is built into Android; the Keystore layer al
 **Stage 3:** sharing out with confirmation; an expiry reminder for ID cards (a local notification, no network); a home-screen shortcut to unlock straight into search.
 
 **Later, planned separately:** Google Play readiness.
+
+## Stage 1 status
+
+Built on `dev` on 2026-11-24 and tested:
+
+- **Unit tests** (`./gradlew testDebugUnitTest`, 22): PBKDF2 against the RFC 7914 vector, AES-GCM round trip and tampering, the key file (create, unlock, wrong secret, change, another phone's Keystore, a changed header, erase), attachment files (no plain bytes on disk, swapped files, path names), the lockout schedule (restart, clock set back), minimums, pattern encoding, search escaping.
+- **Device tests** (`./gradlew connectedDebugAndroidTest`, 5, Android 16 phone emulator): the real Keystore key; the SQLCipher file has no plain text and a wrong key does not open it; attachments and PDF pages are deleted with their item; setup, a note, lock, a wrong and a right unlock, and search through the interface.
+- **Checks** (`./gradlew check`): lint with no errors, the language files, and the no-network check on the debug and release manifests. The release APK's only permission is AndroidX's internal `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`.
+- **By hand**, on the R8 release build: pattern setup and unlock, a wrong pattern counted, an ID card and a ticket with fields, search by number, a PDF and a photo added through the pickers without locking, the PDF shown as pages, screenshots and the recents thumbnail blank, locking on leaving the app and after 1 minute idle, Hindi and back to the system language.
+
+Notes from the build:
+
+- Compose is at 1.12.1 and Material 3 at 1.4.0: Compose 1.13 needs compile SDK 37.1, and this machine has 37.0.
+- Unlocking takes a few seconds on the emulator (600,000 PBKDF2 rounds); expect about a second on a recent phone.
+- New Hindi words, for the owner's review and then ks-utility's term list (`specs/hindi-style.md`, a change in ks-utility, not here): वॉल्ट (vault), पैटर्न (pattern), लॉक / अनलॉक करें (lock / unlock), शीर्षक (title), एन्क्रिप्ट (encrypt), बिंदु (dot of the pattern).
 
 ## Release
 
