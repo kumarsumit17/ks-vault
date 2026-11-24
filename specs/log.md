@@ -1,3 +1,7 @@
+# 2026-11-24
+
+* **Creation**: [Build plan](plan.md) added (proposed): features, security design, backup, languages, libraries with licences and a staged roadmap; waiting for the owner's approval.
+
 # 2026-11-23
 
 * **Update**: Release: `.github/workflows/release.yml` now calls ks-utility's shared release workflow (`kotlin-app-release.yml@v0.4.0`, [spec](https://github.com/kumarsumit17/ks-utility/blob/main/specs/release-workflow.md)): one workflow for every Kotlin app, with a rehearsal input, pinned actions, signature checks, build-provenance attestations and `gh` publishing.
