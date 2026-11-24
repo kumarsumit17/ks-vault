@@ -1,5 +1,6 @@
 # 2026-11-24
 
+* **Update**: [Build plan](plan.md) approved by the owner: PBKDF2 (600,000 rounds), stage 1 as the first version, minimums 4 dots and 6 characters, debug build on the same package.
 * **Creation**: [Build plan](plan.md) added (proposed): features, security design, backup, languages, libraries with licences and a staged roadmap; waiting for the owner's approval.
 
 # 2026-11-23

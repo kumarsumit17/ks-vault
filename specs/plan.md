@@ -3,7 +3,7 @@ type: Plan
 title: Build plan
 description: What KS Vault does, how it keeps data safe, the libraries it uses and the stages it is built in, starting with a minimal first version.
 tags: [plan, roadmap, security, features, libraries]
-status: proposed
+status: approved
 ---
 
 # Build plan
@@ -132,9 +132,11 @@ Not used: no Argon2 library (PBKDF2 is built into Android; the Keystore layer al
 - The repository's four signing secrets are set by the owner and checked before the first release; a rehearsal must pass before the first tag. The owner is asked before any tag is pushed.
 - `ks-suite.json` (the landing-page card) stays in step with what the app does.
 
-## Choices for the owner
+## Decisions (owner, 2026-11-24)
 
-1. **Key derivation:** PBKDF2-HMAC-SHA256 with 600,000 rounds (built in, no library), or Argon2id (stronger against guessing hardware, adds Bouncy Castle, MIT). Recommended: PBKDF2, because the Keystore layer keeps guessing on the phone.
-2. **First version scope:** stage 1 as above, with backup in stage 2. Recommended, but a vault without backup loses everything with the phone; backup could move into stage 1 instead.
-3. **Minimum pattern and password:** 4 dots and 6 characters.
-4. **Debug build:** the same package `com.ks.vault` (as the testing spec says), so a debug build replaces an installed release.
+The plan was approved with these choices:
+
+1. **Key derivation:** PBKDF2-HMAC-SHA256 with 600,000 rounds (built in, no library), not Argon2id: the Keystore layer keeps guessing on the phone.
+2. **First version:** stage 1 as above; backup to a file comes in stage 2.
+3. **Minimums:** a pattern of at least 4 dots, a password of at least 6 characters.
+4. **Debug build:** the same package `com.ks.vault`, so a debug build replaces an installed release.
