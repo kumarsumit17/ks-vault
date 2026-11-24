@@ -1,0 +1,11 @@
+{
+  "name": "KS Vault",
+  "group": "personal",
+  "icon": "shieldCheck",
+  "platforms": ["android"],
+  "stack": "Kotlin · Compose",
+  "tagline": {
+    "en": "Fully offline vault for notes, IDs and tickets, behind a pattern or password.",
+    "hi": "नोट्स, ID और टिकट के लिए पूरी तरह ऑफ़लाइन वॉल्ट, पैटर्न या पासवर्ड से सुरक्षित।"
+  }
+}
