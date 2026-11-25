@@ -1,3 +1,7 @@
+# 2026-11-25
+
+* **Update**: `ks-utility` moved from `v0.6.0` to `v0.9.0` (more languages, the translation tools; [ks-utility translation tools](https://github.com/kumarsumit17/ks-utility/blob/main/specs/translating.md)).
+
 # 2026-11-24
 
 * **Update**: Stage 1 built on `dev`: Gradle build in `mobile/android` (`:mobile:android`), the root `app/` skeleton removed; `ks-utility` moved to `v0.6.0`; release workflow on `kotlin-app-release.yml@v0.6.0` with `android-module: ":mobile:android"` and no TV module. [Build plan](plan.md) records the test results.
