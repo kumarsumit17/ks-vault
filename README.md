@@ -22,7 +22,7 @@ Needs JDK 17, the Android SDK (compile SDK 37) and Node 23.6+ (for the ks-utilit
 
 ## Release
 
-Releases are cut by pushing a semantic version tag (`git tag v1.2.3 && git push --tags`).
+Releases are cut by pushing an Android platform tag (`git tag -a android-v1.2.3 -m android-v1.2.3 && git push origin android-v1.2.3`).
 See the suite-level [CI/CD guide](https://github.com/kumarsumit17/KS-Suite#-cicd-semantic-versioning--automated-signing).
 
 ## License

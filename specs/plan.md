@@ -143,7 +143,7 @@ Notes from the build:
 
 ## Release
 
-- `.github/workflows/release.yml` calls ks-utility's `kotlin-app-release.yml@v0.6.0` with `android-module: ":mobile:android"` and no `tv-module` (phone only).
+- `.github/workflows/release.yml` calls ks-utility's `kotlin-app-release.yml@v0.10.1` (releases tagged `android-vX.Y.Z`) with `android-module: ":mobile:android"` and no `tv-module` (phone only).
 - The repository's four signing secrets are set by the owner and checked before the first release; a rehearsal must pass before the first tag. The owner is asked before any tag is pushed.
 - `ks-suite.json` (the landing-page card) stays in step with what the app does.
 

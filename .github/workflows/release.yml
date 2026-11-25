@@ -4,13 +4,15 @@ name: Release
 # (https://github.com/kumarsumit17/ks-utility/blob/main/specs/release-workflow.md).
 # This file only names KS Vault's platform: the Android phone app (no Google TV build).
 #
-#   Tag push vMAJOR.MINOR.PATCH   Builds and verifies the signed APK and AAB, then publishes the
-#                                 GitHub Release (full release, latest).
+#   Tag push android-vX.Y.Z       KS Vault's releases: builds and verifies the signed APK and AAB,
+#                                 then publishes the GitHub Release (a platform release, not marked
+#                                 latest; suite rule "Platform tags" in KS-Suite specs/versioning-signing.md).
+#   Tag push vX.Y.Z               Also accepted (a plain tag releases every platform; here the same one).
 #   Manual run (rehearsal)        Builds and checks everything for the version given; never publishes.
 
 on:
   push:
-    tags: ["v*.*.*"]
+    tags: ["android-v*.*.*", "v*.*.*"]
   workflow_dispatch:
     inputs:
       version:
@@ -27,7 +29,7 @@ concurrency:
 
 jobs:
   release:
-    uses: kumarsumit17/ks-utility/.github/workflows/kotlin-app-release.yml@v0.6.0
+    uses: kumarsumit17/ks-utility/.github/workflows/kotlin-app-release.yml@v0.10.1
     permissions:
       contents: write
       id-token: write
