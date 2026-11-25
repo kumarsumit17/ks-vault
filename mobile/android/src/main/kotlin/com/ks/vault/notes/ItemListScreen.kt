@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.horizontalScroll
@@ -23,7 +25,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -79,12 +81,14 @@ fun ItemListScreen(vault: VaultRepository, nav: Navigator, session: VaultSession
         },
         floatingActionButton = {
             Box {
-                ExtendedFloatingActionButton(
-                    onClick = { addMenu = true },
-                    icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                    text = { Text(stringResource(R.string.common_add)) },
-                    modifier = Modifier.testTag("add"),
-                )
+                // A plain FAB with an icon and a label: the label reaches TalkBack as the button's text.
+                FloatingActionButton(onClick = { addMenu = true }, modifier = Modifier.testTag("add")) {
+                    Row(Modifier.padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.common_add))
+                    }
+                }
                 DropdownMenu(expanded = addMenu, onDismissRequest = { addMenu = false }) {
                     ItemKind.entries.forEach { k ->
                         DropdownMenuItem(

@@ -7,6 +7,7 @@ import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.ks.vault.ui.NoLearningKeyboard
 import com.ks.vault.ui.VaultRoot
 import com.ks.vault.ui.VaultTheme
 
@@ -19,11 +20,14 @@ class MainActivity : AppCompatActivity() {
         // No screenshots, no screen recording, and a blank thumbnail in recents. Compose dialogs and
         // menus inherit it from this window.
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        WindowHardening.apply(window.decorView)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             VaultTheme {
-                VaultRoot(app.session, app.settings)
+                NoLearningKeyboard {
+                    VaultRoot(app.session, app.settings)
+                }
             }
         }
     }

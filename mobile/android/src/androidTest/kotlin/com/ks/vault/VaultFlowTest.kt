@@ -1,5 +1,8 @@
 package com.ks.vault
 
+import android.os.Build
+import android.view.View
+import android.view.WindowManager
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -12,6 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ks.vault.auth.VaultSession
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,6 +40,19 @@ class VaultFlowTest {
         waitForTag("password")
         rule.onNodeWithTag("password").performTextInput(p)
         rule.onNodeWithTag("submit").performClick()
+    }
+
+    @Test fun windowIsHardened() {
+        rule.activity.runOnUiThread {
+            val window = rule.activity.window
+            val decor = window.decorView
+            assertTrue(window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE != 0)
+            assertTrue(decor.filterTouchesWhenObscured)
+            assertEquals(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS, decor.importantForAutofill)
+            if (Build.VERSION.SDK_INT >= 34) {
+                assertTrue(decor.isAccessibilityDataSensitive)
+            }
+        }
     }
 
     @Test fun setUpAddANoteLockAndUnlock() {

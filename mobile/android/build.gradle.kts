@@ -36,6 +36,9 @@ android {
         versionCode = appVersionCode
         versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Phones (arm64, 32-bit ARM) and x86_64 emulators and Chromebooks. 32-bit x86 is left out:
+        // only very old emulators use it (specs/plan-per-platform.md, decision 2).
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
 
     val storeFilePath = signingValue("SIGNING_STORE_FILE", "storeFile")

@@ -13,6 +13,8 @@ import javax.crypto.spec.GCMParameterSpec
 /**
  * An AES-256-GCM key in the Android Keystore. It is created on this phone, cannot be exported,
  * and is kept in StrongBox when the phone has one. A copy of the app's files is useless without it.
+ * On Android 9 and later it can be used only while the phone is unlocked, so malware running while
+ * the phone is locked cannot use it (specs/plan-per-platform.md).
  */
 class KeystoreWrapper(private val alias: String = ALIAS) : KeyWrapper {
 
@@ -30,7 +32,12 @@ class KeystoreWrapper(private val alias: String = ALIAS) : KeyWrapper {
             .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setRandomizedEncryptionRequired(true)
-            .apply { if (strongBox && Build.VERSION.SDK_INT >= 28) setIsStrongBoxBacked(true) }
+            .apply {
+                if (Build.VERSION.SDK_INT >= 28) {
+                    setUnlockedDeviceRequired(true)
+                    if (strongBox) setIsStrongBoxBacked(true)
+                }
+            }
             .build()
 
         val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, PROVIDER)

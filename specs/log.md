@@ -1,5 +1,6 @@
 # 2026-11-25
 
+* **Update**: [Per-platform optimization plan](plan-per-platform.md) step 1 built: unlocked-only Keystore key, window hardening (overlay filter, autofill off, accessibility data sensitive), keyboard without learning, predictive back, `x86` dropped (APK 9.6 → 7.3 MB), labelled Add button; cold start and key-derivation times recorded.
 * **Update**: [Per-platform optimization plan](plan-per-platform.md) approved: all five hardening items, `x86` dropped, baseline profile after measuring, step 1 before build-plan stage 2.
 * **Creation**: [Per-platform optimization plan](plan-per-platform.md) added (proposed), for the suite rule that each platform build is optimized for its OS: an audit of the Android build and the Android-specific changes; waiting for the owner's approval.
 * **Update**: `ks-utility` moved from `v0.6.0` to `v0.9.0` (more languages, the translation tools; [ks-utility translation tools](https://github.com/kumarsumit17/ks-utility/blob/main/specs/translating.md)).

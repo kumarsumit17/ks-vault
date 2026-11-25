@@ -68,6 +68,22 @@ The [Build plan](plan.md)'s stages still decide the features (backup, biometrics
 - Font scale up to 200% and display size largest without clipping; touch targets at least 48 dp.
 - Checked with TalkBack in English and Hindi.
 
+## Step 1 status (2026-11-25)
+
+Built on `dev`:
+
+- Keystore key with `setUnlockedDeviceRequired(true)` (Android 9+). Checked that it is created and used with and without a screen PIN; using it while the phone is locked was not tested by hand (the vault locks when the screen goes off anyway).
+- Window: `filterTouchesWhenObscured`, autofill excluded for the whole window, accessibility data sensitive on Android 14+ (`WindowHardening`); a device test checks all three and `FLAG_SECURE`.
+- Every text field asks the keyboard not to learn (`NoLearningKeyboard`, `IME_FLAG_NO_PERSONALIZED_LEARNING` through Compose's text-input interceptor).
+- Predictive back declared (`enableOnBackInvokedCallback`).
+- ABIs `arm64-v8a`, `armeabi-v7a`, `x86_64`: release APK 9.6 MB → 7.3 MB. Native libraries stay 16 KB page-aligned.
+- The Add button is a plain FAB with icon and text, so its label reaches TalkBack (it was reported as unlabeled before).
+
+Measured on the Android 16 phone emulator (Apple silicon), release build:
+
+- Cold start to the first screen: 0.7–1.2 s for the first starts after install, about 0.2 s once Android has compiled the app. The first starts miss the 700 ms target, so a baseline profile is the question for decision 3.
+- Key derivation (600,000 PBKDF2 rounds): 1.4–2.4 s. To be measured on a real phone before changing anything.
+
 ## 3. Decisions for the owner
 
 1. **Security hardening** (section 2, first group): all five as listed? Recommended: yes. Trade-off: with autofill off, a password manager cannot fill the vault's secret, which is intended.
