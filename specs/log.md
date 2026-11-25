@@ -1,5 +1,6 @@
 # 2026-11-25
 
+* **Update**: `ks-utility` moved from `v0.9.0` to `v0.10.1`: KS Vault's new Hindi terms are in its term list (owner review); the new release-list helpers are not used here (no network). Still no network code in ks-utility.
 * **Update**: [Per-platform optimization plan](plan-per-platform.md) step 1 built: unlocked-only Keystore key, window hardening (overlay filter, autofill off, accessibility data sensitive), keyboard without learning, predictive back, `x86` dropped (APK 9.6 → 7.3 MB), labelled Add button; cold start and key-derivation times recorded.
 * **Update**: [Per-platform optimization plan](plan-per-platform.md) approved: all five hardening items, `x86` dropped, baseline profile after measuring, step 1 before build-plan stage 2.
 * **Creation**: [Per-platform optimization plan](plan-per-platform.md) added (proposed), for the suite rule that each platform build is optimized for its OS: an audit of the Android build and the Android-specific changes; waiting for the owner's approval.
