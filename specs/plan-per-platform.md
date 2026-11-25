@@ -3,12 +3,12 @@ type: Plan
 title: Per-platform optimization plan
 description: How KS Vault's one build, the Android phone app, is made the best it can be on Android, following the suite rule that each platform build is optimized for its own OS.
 tags: [plan, platforms, android, security, performance, accessibility]
-status: proposed
+status: approved
 ---
 
 # Per-platform optimization plan
 
-**Status: proposed, waiting for the owner's approval.** Suite rule (owner, 2026-11-25): each platform build is its own app, tuned to its OS, with as few dependencies as possible ([platform folders](https://github.com/kumarsumit17/KS-Suite/blob/dev/specs/platform-folders.md#each-platform-build-is-optimized-for-its-os)). Model: [ks-jaiplayer's plan](https://github.com/kumarsumit17/ks-jaiplayer/blob/dev/specs/plan-per-platform.md).
+**Status: approved by the owner on 2026-11-25:** all five hardening items, 32-bit `x86` dropped, baseline profile only after measuring, and step 1 before stage 2 of the build plan. Suite rule (owner, 2026-11-25): each platform build is its own app, tuned to its OS, with as few dependencies as possible ([platform folders](https://github.com/kumarsumit17/KS-Suite/blob/dev/specs/platform-folders.md#each-platform-build-is-optimized-for-its-os)). Model: [ks-jaiplayer's plan](https://github.com/kumarsumit17/ks-jaiplayer/blob/dev/specs/plan-per-platform.md).
 
 KS Vault has **one platform: the Android phone** (`mobile/android/`). There is no Google TV, macOS, Windows or iOS build, and none is planned: a vault of IDs needs the phone's secure hardware, and typing on a TV remote is no place for a password. So this plan has one section; there is no `shared/` folder and nothing to share. Versioning stays one tag (`vX.Y.Z`) for the one build.
 
