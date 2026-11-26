@@ -1,23 +1,19 @@
 {
   "app.name": "KS Vault",
-
   "kind.note": "नोट",
   "kind.idCard": "ID कार्ड",
   "kind.ticket": "टिकट",
-
   "idType.aadhaar": "आधार",
   "idType.pan": "पैन कार्ड",
   "idType.passport": "पासपोर्ट",
   "idType.drivingLicence": "ड्राइविंग लाइसेंस",
   "idType.voterId": "वोटर ID",
   "idType.other": "अन्य",
-
   "ticketType.train": "ट्रेन",
   "ticketType.flight": "फ़्लाइट",
   "ticketType.bus": "बस",
   "ticketType.event": "इवेंट",
   "ticketType.other": "अन्य",
-
   "lock.password": "पासवर्ड",
   "lock.patternPad": "पैटर्न पैड: बिंदुओं को जोड़कर पैटर्न बनाएं",
   "lock.kindPassword": "पासवर्ड",
@@ -27,34 +23,35 @@
   "lock.enterAgain": "पक्का करने के लिए फिर से दर्ज करें।",
   "lock.mismatch": "दोनों मेल नहीं खाए। फिर से शुरू करें।",
   "lock.working": "वॉल्ट सुरक्षित किया जा रहा है…",
-
+  "lock.dot": "बिंदु {n}",
+  "lock.dotChosen": "बिंदु {n}, पैटर्न में नंबर {place}",
+  "lock.patternClear": "साफ़ करें",
   "setup.title": "KS Vault सेट अप करें",
   "setup.intro": "पासवर्ड या पैटर्न चुनें। इसे वापस पाने का कोई तरीका नहीं है: भूल गए तो वॉल्ट में रखा सब कुछ खो जाएगा।",
-
   "unlock.title": "KS Vault लॉक है",
   "unlock.button": "अनलॉक करें",
-  "unlock.wrong": { "one": "गलत। इंतज़ार से पहले {count} और कोशिश बची है।", "other": "गलत। इंतज़ार से पहले {count} और कोशिशें बची हैं।" },
+  "unlock.wrong": {
+    "one": "गलत। इंतज़ार से पहले {count} और कोशिश बची है।",
+    "other": "गलत। इंतज़ार से पहले {count} और कोशिशें बची हैं।"
+  },
   "unlock.wrongLast": "गलत। अगली गलत कोशिश पर और लंबा इंतज़ार करना होगा।",
   "unlock.wait": "बहुत सारी गलत कोशिशें। {time} बाद फिर से कोशिश करें।",
   "unlock.unreadable": "यह वॉल्ट अब इस फ़ोन पर नहीं खुल सकता। फ़ोन के सुरक्षित स्टोरेज में रखी इसकी चाबी नहीं रही।",
   "unlock.forgot": "भूल गए?",
-
   "erase.title": "पूरा वॉल्ट डिलीट करें?",
   "erase.message": "पासवर्ड या पैटर्न के बिना वॉल्ट में कुछ भी नहीं खुल सकता। पूरा वॉल्ट डिलीट करने पर हर नोट, ID कार्ड, टिकट और फ़ाइल डिलीट हो जाएगी, ताकि आप फिर से शुरू कर सकें। इसे वापस नहीं किया जा सकता।",
   "erase.button": "सब कुछ डिलीट करें",
-
   "list.lockNow": "अभी लॉक करें",
   "list.searchHint": "नोट, ID और टिकट खोजें",
   "list.searchClear": "खोज साफ़ करें",
   "list.filterAll": "सभी",
   "list.empty": "अभी यहां कुछ नहीं है। नोट, ID कार्ड या टिकट सेव करने के लिए जोड़ें पर टैप करें।",
   "list.noMatch": "कुछ नहीं मिला।",
-
+  "list.chooseItem": "यहां देखने के लिए कोई नोट, ID कार्ड या टिकट चुनें।",
   "item.pinned": "पिन किया हुआ",
   "item.pin": "सबसे ऊपर पिन करें",
   "item.unpin": "पिन हटाएं",
   "item.edit": "बदलें",
-
   "field.title": "शीर्षक",
   "field.notes": "नोट्स",
   "field.idType": "प्रकार",
@@ -70,15 +67,12 @@
   "field.timeHint": "जैसे 18:45",
   "field.bookingRef": "बुकिंग नंबर (PNR)",
   "field.seat": "सीट",
-
   "edit.newTitle": "नया {kind}",
   "edit.title": "{kind} बदलें",
   "edit.titleMissing": "इसे एक शीर्षक दें।",
   "edit.clearDate": "तारीख हटाएं",
   "edit.attachLater": "सेव करने के बाद आप फ़ोटो और PDF फ़ाइलें जोड़ सकते हैं।",
-
   "copy.done": "कॉपी हो गया। एक मिनट में क्लिपबोर्ड से हट जाएगा।",
-
   "attach.title": "फ़ोटो और फ़ाइलें",
   "attach.none": "अभी कोई फ़ोटो या फ़ाइल नहीं है।",
   "attach.addPhoto": "फ़ोटो जोड़ें",
@@ -88,18 +82,19 @@
   "attach.unsupported": "सिर्फ़ फ़ोटो और PDF फ़ाइलें जोड़ी जा सकती हैं। पासवर्ड वाली PDF नहीं पढ़ी जा सकती।",
   "attach.failed": "फ़ाइल पढ़ी नहीं जा सकी।",
   "attach.delete": "यह फ़ाइल हटाएं",
-
   "settings.lock": "लॉक",
   "settings.lockPassword": "वॉल्ट पासवर्ड से लॉक है।",
   "settings.lockPattern": "वॉल्ट पैटर्न से लॉक है।",
   "settings.changeSecret": "पासवर्ड या पैटर्न बदलें",
   "settings.autoLock": "इतनी देर बाद लॉक करें",
   "settings.autoLockHint": "ऐप से बाहर जाते ही भी वॉल्ट लॉक हो जाता है।",
-  "settings.minutes": { "one": "{count} मिनट", "other": "{count} मिनट" },
+  "settings.minutes": {
+    "one": "{count} मिनट",
+    "other": "{count} मिनट"
+  },
   "settings.updateOffline": "KS Vault कभी ऑनलाइन नहीं जाता, इसलिए अपडेट की जांच नहीं करता। बटन आपके ब्राउज़र में डाउनलोड पेज खोलता है।",
   "settings.about": "जानकारी",
   "settings.aboutText": "सब कुछ इसी फ़ोन पर एन्क्रिप्ट रहता है और कभी कहीं नहीं भेजा जाता: ऐप के पास इंटरनेट नहीं है और यह क्लाउड बैकअप में शामिल नहीं होता। यह रूट किए गए या संक्रमित फ़ोन से, अनलॉक करते समय देख लेने वाले से, या आपका पासवर्ड या पैटर्न जानने वाले से नहीं बचा सकता।",
-
   "change.current": "अपना मौजूदा पासवर्ड या पैटर्न दर्ज करें",
   "change.wrong": "यह सही नहीं है। फिर से कोशिश करें।",
   "change.new": "नया चुनें"

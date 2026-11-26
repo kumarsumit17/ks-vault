@@ -78,6 +78,17 @@ class AuthTest {
         Secrets.patternChars(listOf(0, 1, 0))
     }
 
+    @Test fun skippedMiddleDotIsAdded() {
+        fun pattern(vararg taps: Int) = mutableListOf<Int>().also { d -> taps.forEach { Secrets.addPatternDot(d, it) } }
+        assertEquals(listOf(0, 1, 2), pattern(0, 2))          // row
+        assertEquals(listOf(0, 3, 6), pattern(0, 6))          // column
+        assertEquals(listOf(0, 4, 8), pattern(0, 8))          // diagonal
+        assertEquals(listOf(4, 0, 1, 2), pattern(4, 0, 2))    // 0 -> 2 passes 1
+        assertEquals(listOf(1, 0, 2), pattern(1, 0, 2))       // 1 already chosen: not added twice
+        assertEquals(listOf(0, 5), pattern(0, 5))             // a knight's move passes no dot
+        assertEquals(listOf(0, 1), pattern(0, 1, 1))          // a dot is used once
+    }
+
     @Test fun searchPattern() {
         assertNull(Search.likePattern("  "))
         assertEquals("%pnr%", Search.likePattern(" pnr "))

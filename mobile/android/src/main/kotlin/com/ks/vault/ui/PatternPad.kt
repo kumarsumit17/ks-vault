@@ -19,6 +19,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.ks.vault.auth.Secrets
 import kotlin.math.hypot
 
 /**
@@ -32,6 +33,21 @@ fun PatternPad(
     modifier: Modifier = Modifier,
     description: String,
     enabled: Boolean = true,
+) {
+    // With TalkBack (explore by touch) a drawn pattern is not usable: show the dots as buttons.
+    if (rememberTouchExploration()) {
+        AccessiblePatternPad(onDone, modifier, enabled)
+    } else {
+        DrawnPatternPad(onDone, modifier, description, enabled)
+    }
+}
+
+@Composable
+private fun DrawnPatternPad(
+    onDone: (List<Int>) -> Unit,
+    modifier: Modifier,
+    description: String,
+    enabled: Boolean,
 ) {
     val dots = remember { mutableStateListOf<Int>() }
     var finger by remember { mutableStateOf<Offset?>(null) }
@@ -52,20 +68,7 @@ fun PatternPad(
                     val c = center(i)
                     hypot(p.x - c.x, p.y - c.y) < cell * 0.32f
                 }
-                fun add(i: Int) {
-                    if (i in dots) return
-                    val last = dots.lastOrNull()
-                    if (last != null) {
-                        // The dot between two others in a row, column or diagonal.
-                        val (r1, c1) = last / 3 to last % 3
-                        val (r2, c2) = i / 3 to i % 3
-                        if ((r1 + r2) % 2 == 0 && (c1 + c2) % 2 == 0) {
-                            val mid = (r1 + r2) / 2 * 3 + (c1 + c2) / 2
-                            if (mid != last && mid != i && mid !in dots) dots.add(mid)
-                        }
-                    }
-                    dots.add(i)
-                }
+                fun add(i: Int) = Secrets.addPatternDot(dots, i)
                 detectDragGestures(
                     onDragStart = { p ->
                         dots.clear()
@@ -104,3 +107,4 @@ fun PatternPad(
         }
     }
 }
+

@@ -1,23 +1,19 @@
 {
   "app.name": "KS Vault",
-
   "kind.note": "Note",
   "kind.idCard": "ID card",
   "kind.ticket": "Ticket",
-
   "idType.aadhaar": "Aadhaar",
   "idType.pan": "PAN card",
   "idType.passport": "Passport",
   "idType.drivingLicence": "Driving licence",
   "idType.voterId": "Voter ID",
   "idType.other": "Other",
-
   "ticketType.train": "Train",
   "ticketType.flight": "Flight",
   "ticketType.bus": "Bus",
   "ticketType.event": "Event",
   "ticketType.other": "Other",
-
   "lock.password": "Password",
   "lock.patternPad": "Pattern pad: draw a pattern through the dots",
   "lock.kindPassword": "Password",
@@ -27,34 +23,35 @@
   "lock.enterAgain": "Enter it again to confirm.",
   "lock.mismatch": "They did not match. Start again.",
   "lock.working": "Securing the vault…",
-
+  "lock.dot": "Dot {n}",
+  "lock.dotChosen": "Dot {n}, number {place} in the pattern",
+  "lock.patternClear": "Clear",
   "setup.title": "Set up KS Vault",
   "setup.intro": "Choose a password or a pattern. There is no way to recover it: if you forget it, everything in the vault is lost.",
-
   "unlock.title": "KS Vault is locked",
   "unlock.button": "Unlock",
-  "unlock.wrong": { "one": "Wrong. One more try before a wait.", "other": "Wrong. {count} more tries before a wait." },
+  "unlock.wrong": {
+    "one": "Wrong. One more try before a wait.",
+    "other": "Wrong. {count} more tries before a wait."
+  },
   "unlock.wrongLast": "Wrong. The next wrong try means a longer wait.",
   "unlock.wait": "Too many wrong tries. Try again in {time}.",
   "unlock.unreadable": "The vault cannot be opened on this phone any more. Its key in the phone's secure storage is gone.",
   "unlock.forgot": "Forgot it?",
-
   "erase.title": "Erase the whole vault?",
   "erase.message": "Without the password or pattern nothing in the vault can be opened. Erasing deletes every note, ID card, ticket and file, so you can start again. This cannot be undone.",
   "erase.button": "Erase everything",
-
   "list.lockNow": "Lock now",
   "list.searchHint": "Search notes, IDs and tickets",
   "list.searchClear": "Clear search",
   "list.filterAll": "All",
   "list.empty": "Nothing here yet. Tap Add to save a note, an ID card or a ticket.",
   "list.noMatch": "Nothing matches.",
-
+  "list.chooseItem": "Choose a note, ID card or ticket to see it here.",
   "item.pinned": "Pinned",
   "item.pin": "Pin to the top",
   "item.unpin": "Unpin",
   "item.edit": "Edit",
-
   "field.title": "Title",
   "field.notes": "Notes",
   "field.idType": "Type",
@@ -70,15 +67,12 @@
   "field.timeHint": "e.g. 18:45",
   "field.bookingRef": "Booking reference (PNR)",
   "field.seat": "Seat",
-
   "edit.newTitle": "New {kind}",
   "edit.title": "Edit {kind}",
   "edit.titleMissing": "Give it a title.",
   "edit.clearDate": "Clear the date",
   "edit.attachLater": "After saving, you can add photos and PDF files.",
-
   "copy.done": "Copied. It is cleared from the clipboard in a minute.",
-
   "attach.title": "Photos and files",
   "attach.none": "No photos or files yet.",
   "attach.addPhoto": "Add photo",
@@ -88,18 +82,19 @@
   "attach.unsupported": "Only photos and PDF files can be added. Password-protected PDFs cannot be read.",
   "attach.failed": "The file could not be read.",
   "attach.delete": "Remove this file",
-
   "settings.lock": "Lock",
   "settings.lockPassword": "The vault is locked with a password.",
   "settings.lockPattern": "The vault is locked with a pattern.",
   "settings.changeSecret": "Change password or pattern",
   "settings.autoLock": "Lock after",
   "settings.autoLockHint": "The vault also locks as soon as you leave the app.",
-  "settings.minutes": { "one": "{count} minute", "other": "{count} minutes" },
+  "settings.minutes": {
+    "one": "{count} minute",
+    "other": "{count} minutes"
+  },
   "settings.updateOffline": "KS Vault never goes online, so it does not check for updates. The button opens the download page in your browser.",
   "settings.about": "About",
   "settings.aboutText": "Everything is encrypted on this phone and nothing is ever sent anywhere: the app has no internet access and is left out of cloud backups. It cannot protect against a phone that is rooted or infected, someone who watches you unlock it, or someone who knows your password or pattern.",
-
   "change.current": "Enter your current password or pattern",
   "change.wrong": "That is not it. Try again.",
   "change.new": "Choose the new one"

@@ -30,6 +30,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -59,7 +60,13 @@ import com.ks.vault.ui.summary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemListScreen(vault: VaultRepository, nav: Navigator, session: VaultSession) {
+fun ItemListScreen(
+    vault: VaultRepository,
+    nav: Navigator,
+    session: VaultSession,
+    selectedId: Long? = null,
+    onOpen: (Long) -> Unit = { nav.go(Route.Detail(it)) },
+) {
     var query by remember { mutableStateOf("") }
     var kind by remember { mutableStateOf<ItemKind?>(null) }
     var addMenu by remember { mutableStateOf(false) }
@@ -151,7 +158,8 @@ fun ItemListScreen(vault: VaultRepository, nav: Navigator, session: VaultSession
                             trailingContent = {
                                 if (item.pinned) Icon(Icons.Filled.Star, contentDescription = stringResource(R.string.item_pinned), tint = MaterialTheme.colorScheme.primary)
                             },
-                            modifier = Modifier.clickable { nav.go(Route.Detail(item.id)) }.testTag("item"),
+                            colors = if (item.id == selectedId) ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer) else ListItemDefaults.colors(),
+                            modifier = Modifier.clickable { onOpen(item.id) }.testTag("item"),
                         )
                     }
                 }

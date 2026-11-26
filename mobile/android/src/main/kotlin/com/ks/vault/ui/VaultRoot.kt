@@ -1,6 +1,21 @@
 package com.ks.vault.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.ks.vault.R
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -47,7 +62,44 @@ fun VaultRoot(session: VaultSession, settings: VaultSettings) {
             // A new navigator for every unlock: the vault always opens on the list.
             val nav = remember(s.vault) { Navigator() }
             BackHandler(enabled = nav.stack.size > 1) { nav.back() }
-            when (val r = nav.current) {
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                val r = nav.current
+                // Wide screens (landscape, foldables): the list and the chosen item side by side.
+                if (maxWidth >= WIDE && (r == Route.List || r is Route.Detail)) {
+                    val selected = (r as? Route.Detail)?.id
+                    Row(Modifier.fillMaxSize()) {
+                        Box(Modifier.weight(0.42f)) {
+                            ItemListScreen(s.vault, nav, session, selected) { id ->
+                                if (nav.current is Route.Detail) nav.replace(Route.Detail(id)) else nav.go(Route.Detail(id))
+                            }
+                        }
+                        VerticalDivider()
+                        Box(Modifier.weight(0.58f), contentAlignment = Alignment.Center) {
+                            if (selected != null) {
+                                key(selected) { ItemDetailScreen(s.vault, nav, session, selected) }
+                            } else {
+                                Text(
+                                    stringResource(R.string.list_choose_item),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(32.dp),
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    Screen(r, s, nav, session, settings)
+                }
+            }
+        }
+    }
+}
+
+private val WIDE = 720.dp
+
+@Composable
+private fun Screen(r: Route, s: VaultSession.State.Unlocked, nav: Navigator, session: VaultSession, settings: VaultSettings) {
+            when (r) {
                 Route.List -> ItemListScreen(s.vault, nav, session)
                 is Route.Detail -> ItemDetailScreen(s.vault, nav, session, r.id)
                 is Route.Edit -> ItemEditScreen(s.vault, nav, r.id, r.kind)
@@ -55,6 +107,4 @@ fun VaultRoot(session: VaultSession, settings: VaultSettings) {
                 Route.Settings -> SettingsScreen(session, settings, nav)
                 Route.ChangeSecret -> ChangeSecretScreen(session, nav, s.kind)
             }
-        }
-    }
 }
