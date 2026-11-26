@@ -44,7 +44,7 @@ adb shell monkey -p com.ks.vault -c android.intent.category.LAUNCHER 1   # open 
 
 ## Releases
 - Build, test, release, without waiting (owner, 2026-11-26): every feature or fix is built, tested on the phone emulator, committed and pushed to `dev`, and released with the next tag. No approval is asked before a tag, and the owner's hand checks on a real phone come later and never block a release. Never commit or release while a test fails.
-- A release: fast-forward `main` to `dev`, push it, then push an annotated `android-vX.Y.Z` tag on `main` (a feature raises MINOR, a fix raises PATCH). The release workflow publishes it ([release cycle](https://github.com/kumasumit/KS-Suite/blob/dev/specs/release-cycle.md)).
+- A release: fast-forward `main` to `dev`, push it, then push an annotated `android-vX.Y.Z` tag on `main` (a feature raises MINOR, a fix raises PATCH). The release workflow publishes it ([release cycle](https://github.com/kumasumit/ks-suite/blob/dev/specs/release-cycle.md)).
 
 ## Platform folders
 - Every KS-Suite app repo has the same top-level platform folders: `tv/google-tv/`, `desktop/mac/`, `desktop/windows/`, `mobile/android/` and `mobile/ios/`. All five exist in every app repo, whether or not the app supports that platform yet.
