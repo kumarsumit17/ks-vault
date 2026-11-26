@@ -5,6 +5,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,7 +62,7 @@ import com.ks.vault.ui.formatDay
 import com.ks.vault.ui.label
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ItemDetailScreen(vault: VaultRepository, nav: Navigator, session: VaultSession, id: Long) {
     val context = LocalContext.current
@@ -149,7 +151,10 @@ fun ItemDetailScreen(vault: VaultRepository, nav: Navigator, session: VaultSessi
             if (importing) {
                 CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
             } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(onClick = { nav.go(Route.Camera(id)) }, modifier = Modifier.testTag("takePhoto")) {
+                        Text(stringResource(R.string.camera_take_photo))
+                    }
                     OutlinedButton(onClick = {
                         session.expectExternal()
                         pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

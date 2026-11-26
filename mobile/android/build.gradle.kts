@@ -99,6 +99,9 @@ dependencies {
     implementation(libs.androidx.sqlite)
     implementation(libs.sqlcipher.android)
     implementation(libs.androidx.biometric)
+    implementation(libs.camerax.core)
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
 
     testImplementation(libs.junit)
 

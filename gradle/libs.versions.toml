@@ -19,6 +19,7 @@ room = "2.8.5"
 sqlite = "2.7.1"
 sqlcipher = "4.20.0"
 biometric = "1.1.0"
+camerax = "1.7.0"
 
 junit = "4.13.2"
 androidxTestRunner = "1.7.0"
@@ -43,6 +44,12 @@ sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "s
 
 # Fingerprint or face unlock (Apache-2.0).
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+
+# In-app camera, so no camera app ever writes a plain photo (Apache-2.0). Not camera-view: it pulls in
+# camera-video and Media3, which ask for ACCESS_NETWORK_STATE.
+camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 
 # First-party: the ks-utility submodule, included with includeBuild in settings.gradle.kts (no version).
 ks-utility = { module = "com.ks:utility" }

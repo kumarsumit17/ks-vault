@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- KS Vault is fully offline: no permission of any kind is declared here, and the build fails if a
-     library adds a network permission (checkReleaseNoNetwork in build.gradle.kts). -->
+<!-- KS Vault is fully offline: the build fails if a library adds a network permission
+     (checkReleaseNoNetwork in build.gradle.kts). -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- The only permission KS Vault asks for: the camera inside the app (photos go straight into the
+         vault, encrypted). Not required, so phones without a camera can install it. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:name=".VaultApp"
@@ -27,6 +32,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- "Save to KS Vault" in the share sheet: photos and PDFs, one or several. -->
+            <intent-filter android:label="@string/share_target">
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="application/pdf" />
             </intent-filter>
         </activity>
 

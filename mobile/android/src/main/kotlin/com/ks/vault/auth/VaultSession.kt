@@ -261,6 +261,20 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         return true
     }
 
+    // ---- Files shared into the vault ------------------------------------------------------------
+
+    private val _shared = MutableStateFlow<List<android.net.Uri>>(emptyList())
+    /** Photos and PDFs another app shared with "Save to KS Vault", waiting for the vault to be unlocked. */
+    val shared: StateFlow<List<android.net.Uri>> = _shared.asStateFlow()
+
+    fun receiveShared(uris: List<android.net.Uri>) {
+        if (uris.isNotEmpty()) _shared.value = uris
+    }
+
+    fun clearShared() {
+        _shared.value = emptyList()
+    }
+
     /** Any touch or key press: the idle timer starts again. */
     fun touch() {
         lastTouch = SystemClock.elapsedRealtime()

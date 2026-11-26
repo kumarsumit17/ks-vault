@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,8 @@ import com.ks.vault.auth.VaultSession
 import com.ks.vault.auth.VaultSettings
 import com.ks.vault.data.ItemKind
 import com.ks.vault.documents.AttachmentViewer
+import com.ks.vault.documents.CameraScreen
+import com.ks.vault.documents.SaveSharedScreen
 import com.ks.vault.notes.ItemDetailScreen
 import com.ks.vault.notes.ItemEditScreen
 import com.ks.vault.notes.ItemListScreen
@@ -42,6 +45,8 @@ sealed interface Route {
     data class Detail(val id: Long) : Route
     data class Edit(val id: Long?, val kind: ItemKind) : Route
     data class Viewer(val attachmentId: Long) : Route
+    data class Camera(val itemId: Long) : Route
+    data object SaveShared : Route
     data object Settings : Route
     data object ChangeSecret : Route
     data object Backup : Route
@@ -68,6 +73,11 @@ fun VaultRoot(session: VaultSession, settings: VaultSettings) {
             // A new navigator for every unlock: the vault always opens on the list.
             val nav = remember(s.vault) { Navigator() }
             BackHandler(enabled = nav.stack.size > 1) { nav.back() }
+            // Files shared from another app open the save screen once the vault is unlocked.
+            val shared by session.shared.collectAsStateWithLifecycle()
+            LaunchedEffect(shared) {
+                if (shared.isNotEmpty() && nav.current != Route.SaveShared) nav.go(Route.SaveShared)
+            }
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val r = nav.current
                 // Wide screens (landscape, foldables): the list and the chosen item side by side.
@@ -110,6 +120,8 @@ private fun Screen(r: Route, s: VaultSession.State.Unlocked, nav: Navigator, ses
                 is Route.Detail -> ItemDetailScreen(s.vault, nav, session, r.id)
                 is Route.Edit -> ItemEditScreen(s.vault, nav, r.id, r.kind)
                 is Route.Viewer -> AttachmentViewer(s.vault, nav, r.attachmentId)
+                is Route.Camera -> CameraScreen(s.vault, nav, r.itemId)
+                Route.SaveShared -> SaveSharedScreen(s.vault, nav, session)
                 Route.Settings -> SettingsScreen(session, settings, nav)
                 Route.ChangeSecret -> ChangeSecretScreen(session, nav, s.kind)
                 Route.Backup -> BackupScreen(s.vault, session, nav)

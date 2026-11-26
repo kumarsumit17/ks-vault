@@ -92,6 +92,23 @@
   "attach.unsupported": "Only photos and PDF files can be added. Password-protected PDFs cannot be read.",
   "attach.failed": "The file could not be read.",
   "attach.delete": "Remove this file",
+  "camera.title": "Take a photo",
+  "camera.takePhoto": "Take photo",
+  "camera.take": "Take photo",
+  "camera.asking": "KS Vault needs the camera to take a photo. The photo goes straight into the vault, encrypted.",
+  "camera.denied": "The camera is not allowed. You can allow it in the phone's settings for KS Vault, or add a photo from the gallery instead.",
+  "camera.failed": "The photo could not be taken. Try again.",
+  "share.target": "Save to KS Vault",
+  "share.title": "Save to KS Vault",
+  "share.files": {
+    "one": "{count} file to save in the vault.",
+    "other": "{count} files to save in the vault."
+  },
+  "share.kind": "Save as",
+  "share.failed": {
+    "one": "{count} file could not be added (only photos and PDFs up to 20 MB).",
+    "other": "{count} files could not be added (only photos and PDFs up to 20 MB)."
+  },
   "settings.lock": "Lock",
   "settings.lockPassword": "The vault is locked with a password.",
   "settings.lockPattern": "The vault is locked with a pattern.",
