@@ -1,5 +1,6 @@
 # 2026-11-26
 
+* **Update**: Releases no longer wait for the owner (owner, 2026-11-26): tested work is released with the next tag, and hand checks never block. [Build plan](plan.md) and `CLAUDE.md` updated.
 * **Release**: KS Vault `android-v1.0.0` published (stage 1 and per-platform step 1): `ks-vault-v1.0.0.apk` (7.3 MB) and `.aab`, versionCode 10000, signed with the suite certificate (SHA-256 `2a:a2:5f:08…`), build-provenance attestation verified, only permission AndroidX's internal `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`. Rehearsal passed first.
 * **Update**: The repository moved to the GitHub account `kumasumit` (suite commit 05b83d7): the release workflow calls `kumasumit/ks-utility/.github/workflows/kotlin-app-release.yml@v0.10.1`, the submodule URL is `kumasumit/ks-utility`, Settings' Get the new version opens `kumasumit/ks-vault`'s releases page, and the spec and README links follow.
 

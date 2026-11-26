@@ -144,7 +144,7 @@ Notes from the build:
 ## Release
 
 - `.github/workflows/release.yml` calls ks-utility's `kotlin-app-release.yml@v0.10.1` (releases tagged `android-vX.Y.Z`) with `android-module: ":mobile:android"` and no `tv-module` (phone only).
-- The repository's four signing secrets are set by the owner and checked before the first release; a rehearsal must pass before the first tag. The owner is asked before any tag is pushed.
+- The repository's four signing secrets are set by the owner and checked before the first release; a rehearsal must pass before the first tag. Tested work is built, committed, pushed and released without waiting (owner, 2026-11-26): no approval before a tag, and the owner's hand checks on a real phone come later and never block a release. A feature raises MINOR, a fix raises PATCH; nothing is released while a test fails.
 - `ks-suite.json` (the landing-page card) stays in step with what the app does.
 
 ## Decisions (owner, 2026-11-24)
