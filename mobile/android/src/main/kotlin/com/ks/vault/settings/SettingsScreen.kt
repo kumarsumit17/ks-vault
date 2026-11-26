@@ -81,6 +81,8 @@ fun SettingsScreen(session: VaultSession, settings: VaultSettings, nav: Navigato
             Spacer(Modifier.height(8.dp))
             OutlinedButton(onClick = { nav.go(Route.ChangeSecret) }) { Text(stringResource(R.string.settings_change_secret)) }
             Spacer(Modifier.height(16.dp))
+            BiometricSetting(session, nav)
+            Spacer(Modifier.height(16.dp))
             Text(stringResource(R.string.settings_auto_lock), style = MaterialTheme.typography.labelLarge)
             Text(stringResource(R.string.settings_auto_lock_hint), style = MaterialTheme.typography.bodySmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

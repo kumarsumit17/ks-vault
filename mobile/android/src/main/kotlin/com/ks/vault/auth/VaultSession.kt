@@ -3,7 +3,10 @@ package com.ks.vault.auth
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.SystemClock
+import android.provider.Settings
+import com.ks.vault.crypto.BiometricKey
 import com.ks.vault.crypto.FileCipher
+import javax.crypto.Cipher
 import com.ks.vault.crypto.KeystoreWrapper
 import com.ks.vault.crypto.SecretKind
 import com.ks.vault.crypto.VaultKeys
@@ -48,6 +51,12 @@ class VaultSession(private val context: Context, private val settings: VaultSett
     private val keys = VaultKeys(File(context.noBackupFilesDir, "vault.key"), KeystoreWrapper())
     private val files = FileCipher(File(context.noBackupFilesDir, "attachments"))
     val lockout = Lockout(PrefsLockoutStore(context), System::currentTimeMillis)
+    private val bioFile = File(context.noBackupFilesDir, "vault.bio")
+    private val bioKey = BiometricKey()
+    private val prefs = context.getSharedPreferences("session", Context.MODE_PRIVATE)
+
+    /** The vault key held only between checking the secret and the biometric prompt that seals it. */
+    private var pendingBioKey: ByteArray? = null
 
     private val _state = MutableStateFlow(initialState())
     val state: StateFlow<State> = _state.asStateFlow()
@@ -72,6 +81,7 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         }
         open(vaultKey, kind)
         lockout.recordSuccess()
+        rememberBootCount()
     }
 
     /** Tries [secret], which is wiped. */
@@ -90,6 +100,7 @@ class VaultSession(private val context: Context, private val settings: VaultSett
                 return UnlockResult.Wrong(lockout.waitMillis(), lockout.failures)
             }
             lockout.recordSuccess()
+            rememberBootCount()
             open(vaultKey, kind)
             return UnlockResult.Ok
         } finally {
@@ -154,12 +165,100 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         lock()
         withContext(Dispatchers.IO) {
             open?.close()
+            disableBiometric()
             keys.erase()
             context.deleteDatabase(VaultDatabase.NAME)
             File(context.noBackupFilesDir, "attachments").deleteRecursively()
         }
         lockout.recordSuccess()
         _state.value = State.NeedsSetup
+    }
+
+    // ---- Fingerprint or face unlock --------------------------------------------------------------
+
+    val biometricEnabled: Boolean get() = bioFile.isFile
+
+    private fun bootCount(): Int? =
+        runCatching { Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT) }.getOrNull()
+
+    private fun rememberBootCount() {
+        bootCount()?.let { prefs.edit().putInt(KEY_BOOT, it).apply() }
+    }
+
+    /** True when the unlock screen may offer the biometric prompt now ([BiometricGate]). */
+    fun biometricAllowedNow(): Boolean = BiometricGate.allowed(
+        enabled = biometricEnabled,
+        bootCountNow = bootCount(),
+        bootCountAtSecretUnlock = if (prefs.contains(KEY_BOOT)) prefs.getInt(KEY_BOOT, -1) else null,
+        lockoutWaitMillis = lockout.waitMillis(),
+    )
+
+    /**
+     * First half of turning biometrics on: checks [secret] (wiped) and returns the cipher to hand to the
+     * biometric prompt, or null when the secret is wrong.
+     */
+    suspend fun prepareEnableBiometric(secret: CharArray): Cipher? {
+        val vaultKey = try {
+            withContext(Dispatchers.Default) { keys.unlock(secret) }
+        } catch (_: VaultUnreadableException) {
+            null
+        } finally {
+            secret.wipe()
+        } ?: return null
+        pendingBioKey?.wipe()
+        pendingBioKey = vaultKey
+        bioKey.destroy() // a fresh key each time it is turned on
+        return bioKey.encryptCipher()
+    }
+
+    /** Second half: the prompt succeeded, so [cipher] can seal the vault key. */
+    fun finishEnableBiometric(cipher: Cipher) {
+        val vaultKey = pendingBioKey ?: return
+        try {
+            val box = cipher.iv + cipher.doFinal(vaultKey)
+            val tmp = File(bioFile.path + ".new")
+            tmp.writeBytes(box)
+            tmp.renameTo(bioFile)
+        } finally {
+            vaultKey.wipe()
+            pendingBioKey = null
+        }
+    }
+
+    fun cancelEnableBiometric() {
+        pendingBioKey?.wipe()
+        pendingBioKey = null
+    }
+
+    fun disableBiometric() {
+        cancelEnableBiometric()
+        bioFile.delete()
+        runCatching { bioKey.destroy() }
+    }
+
+    /**
+     * The cipher for the unlock prompt, or null when biometrics cannot be used: then they are turned off
+     * (for example a new fingerprint was enrolled, which destroys the key).
+     */
+    fun biometricUnlockCipher(): Cipher? = try {
+        bioKey.decryptCipher(bioFile.readBytes().copyOf(BiometricKey.NONCE_BYTES))
+    } catch (_: Exception) {
+        disableBiometric()
+        null
+    }
+
+    /** The prompt succeeded: [cipher] opens the vault key and the vault opens. */
+    suspend fun unlockWithBiometric(cipher: Cipher): Boolean {
+        val kind = keys.kind() ?: return false
+        val vaultKey = try {
+            val box = bioFile.readBytes()
+            cipher.doFinal(box, BiometricKey.NONCE_BYTES, box.size - BiometricKey.NONCE_BYTES)
+        } catch (_: Exception) {
+            disableBiometric()
+            return false
+        }
+        open(vaultKey, kind)
+        return true
     }
 
     /** Any touch or key press: the idle timer starts again. */
@@ -201,6 +300,7 @@ class VaultSession(private val context: Context, private val settings: VaultSett
 
     companion object {
         const val EXTERNAL_GRACE_MS = 3 * 60_000L
+        private const val KEY_BOOT = "bootCountAtSecretUnlock"
         private const val CLOSE_DELAY_MS = 300L
     }
 }

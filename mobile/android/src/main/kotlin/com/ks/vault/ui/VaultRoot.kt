@@ -32,6 +32,7 @@ import com.ks.vault.notes.ItemEditScreen
 import com.ks.vault.notes.ItemListScreen
 import com.ks.vault.settings.BackupScreen
 import com.ks.vault.settings.ChangeSecretScreen
+import com.ks.vault.settings.EnableBiometricScreen
 import com.ks.vault.settings.RestoreScreen
 import com.ks.vault.settings.SettingsScreen
 
@@ -44,6 +45,7 @@ sealed interface Route {
     data object Settings : Route
     data object ChangeSecret : Route
     data object Backup : Route
+    data object EnableBiometric : Route
     data object Restore : Route
 }
 
@@ -111,6 +113,7 @@ private fun Screen(r: Route, s: VaultSession.State.Unlocked, nav: Navigator, ses
                 Route.Settings -> SettingsScreen(session, settings, nav)
                 Route.ChangeSecret -> ChangeSecretScreen(session, nav, s.kind)
                 Route.Backup -> BackupScreen(s.vault, session, nav)
+                Route.EnableBiometric -> EnableBiometricScreen(session, nav, s.kind)
                 Route.Restore -> RestoreScreen(s.vault, session, nav)
             }
 }

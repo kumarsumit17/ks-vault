@@ -1,5 +1,6 @@
 # 2026-11-26
 
+* **Update**: Fingerprint or face unlock (build plan stage 2): a second Keystore key, strong biometrics only, invalidated by a new enrolment, wraps a copy of the vault key; offered only until the phone restarts and never during a lockout. New dependency AndroidX Biometric 1.1.0 (Apache-2.0); it adds the normal permissions `USE_BIOMETRIC` and `USE_FINGERPRINT`, no network. Tested on the emulator with an enrolled fingerprint: turn on, unlock, a non-enrolled finger refused.
 * **Creation**: [Backup file](backup.md) added: backup to an encrypted file with its own password and restore (add or replace) in one transaction (build plan stage 2).
 * **Update**: TalkBack pattern pad (the dots as buttons, same skipped-dot rule as drawing) and list and detail side by side at 720 dp and wider ([Per-platform optimization plan](plan-per-platform.md) step 3).
 * **Update**: Releases no longer wait for the owner (owner, 2026-11-26): tested work is released with the next tag, and hand checks never block. [Build plan](plan.md) and `CLAUDE.md` updated.

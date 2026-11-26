@@ -24,6 +24,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -252,6 +254,28 @@ fun UnlockScreen(session: VaultSession, kind: SecretKind) {
         else -> null
     }
 
+    val context = LocalContext.current
+    val bioTitle = stringResource(R.string.bio_prompt_title)
+    val bioNegative = stringResource(if (kind == SecretKind.PATTERN) R.string.bio_use_pattern else R.string.bio_use_password)
+    var bioOffered by remember { mutableStateOf(session.biometricAllowedNow()) }
+    fun promptBiometric() {
+        val activity = context.findFragmentActivity() ?: return
+        val cipher = session.biometricUnlockCipher()
+        if (cipher == null) {
+            bioOffered = false
+            return
+        }
+        showBiometricPrompt(activity, bioTitle, bioNegative, cipher, onSuccess = { c ->
+            busy = true
+            scope.launch {
+                if (!session.unlockWithBiometric(c)) bioOffered = false
+                busy = false
+            }
+        }, onEnd = {})
+    }
+    // Offer the fingerprint or face once, as soon as the lock screen shows.
+    LaunchedEffect(Unit) { if (bioOffered) promptBiometric() }
+
     LockLayout(stringResource(R.string.unlock_title), message) {
         if (busy) {
             CircularProgressIndicator()
@@ -280,6 +304,12 @@ fun UnlockScreen(session: VaultSession, kind: SecretKind) {
                     }
                 },
             )
+        }
+        if (bioOffered && !busy && !unreadable) {
+            Spacer(Modifier.height(16.dp))
+            OutlinedButton(onClick = { promptBiometric() }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.bio_unlock_button))
+            }
         }
         Spacer(Modifier.height(24.dp))
         TextButton(onClick = { confirmErase = true }) {

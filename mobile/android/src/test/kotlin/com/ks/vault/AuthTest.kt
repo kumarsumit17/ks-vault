@@ -1,5 +1,6 @@
 package com.ks.vault
 
+import com.ks.vault.auth.BiometricGate
 import com.ks.vault.auth.Lockout
 import com.ks.vault.auth.LockoutStore
 import com.ks.vault.auth.Secrets
@@ -87,6 +88,15 @@ class AuthTest {
         assertEquals(listOf(1, 0, 2), pattern(1, 0, 2))       // 1 already chosen: not added twice
         assertEquals(listOf(0, 5), pattern(0, 5))             // a knight's move passes no dot
         assertEquals(listOf(0, 1), pattern(0, 1, 1))          // a dot is used once
+    }
+
+    @Test fun biometricsOnlyUntilARestartAndNotDuringALockout() {
+        assertTrue(BiometricGate.allowed(enabled = true, bootCountNow = 4, bootCountAtSecretUnlock = 4, lockoutWaitMillis = 0))
+        assertFalse(BiometricGate.allowed(enabled = false, bootCountNow = 4, bootCountAtSecretUnlock = 4, lockoutWaitMillis = 0))
+        assertFalse(BiometricGate.allowed(enabled = true, bootCountNow = 5, bootCountAtSecretUnlock = 4, lockoutWaitMillis = 0))
+        assertFalse(BiometricGate.allowed(enabled = true, bootCountNow = 4, bootCountAtSecretUnlock = null, lockoutWaitMillis = 0))
+        assertFalse(BiometricGate.allowed(enabled = true, bootCountNow = null, bootCountAtSecretUnlock = null, lockoutWaitMillis = 0))
+        assertFalse(BiometricGate.allowed(enabled = true, bootCountNow = 4, bootCountAtSecretUnlock = 4, lockoutWaitMillis = 30_000))
     }
 
     @Test fun searchPattern() {

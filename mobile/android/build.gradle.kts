@@ -98,6 +98,7 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.androidx.sqlite)
     implementation(libs.sqlcipher.android)
+    implementation(libs.androidx.biometric)
 
     testImplementation(libs.junit)
 
