@@ -48,7 +48,7 @@ import com.ks.vault.crypto.SecretKind
 import com.ks.vault.ui.Navigator
 import com.ks.vault.ui.Route
 
-private val REPO = GitHubRepo.parse("kumarsumit17/ks-vault")!!
+private val REPO = GitHubRepo.parse("kumasumit/ks-vault")!!
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable

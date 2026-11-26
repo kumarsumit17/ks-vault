@@ -1,3 +1,7 @@
+# 2026-11-26
+
+* **Update**: The repository moved to the GitHub account `kumasumit` (suite commit 05b83d7): the release workflow calls `kumasumit/ks-utility/.github/workflows/kotlin-app-release.yml@v0.10.1`, the submodule URL is `kumasumit/ks-utility`, Settings' Get the new version opens `kumasumit/ks-vault`'s releases page, and the spec and README links follow.
+
 # 2026-11-25
 
 * **Update**: Releases are tagged `android-vX.Y.Z` (suite rule "Platform tags"): `.github/workflows/release.yml` on `kotlin-app-release.yml@v0.10.1`, triggered by `android-v*.*.*` (and plain `v*.*.*`); [Per-platform optimization plan](plan-per-platform.md), [Build plan](plan.md) and the README updated. No bridge release: KS Vault has no update checker.
@@ -5,7 +9,7 @@
 * **Update**: [Per-platform optimization plan](plan-per-platform.md) step 1 built: unlocked-only Keystore key, window hardening (overlay filter, autofill off, accessibility data sensitive), keyboard without learning, predictive back, `x86` dropped (APK 9.6 → 7.3 MB), labelled Add button; cold start and key-derivation times recorded.
 * **Update**: [Per-platform optimization plan](plan-per-platform.md) approved: all five hardening items, `x86` dropped, baseline profile after measuring, step 1 before build-plan stage 2.
 * **Creation**: [Per-platform optimization plan](plan-per-platform.md) added (proposed), for the suite rule that each platform build is optimized for its OS: an audit of the Android build and the Android-specific changes; waiting for the owner's approval.
-* **Update**: `ks-utility` moved from `v0.6.0` to `v0.9.0` (more languages, the translation tools; [ks-utility translation tools](https://github.com/kumarsumit17/ks-utility/blob/main/specs/translating.md)).
+* **Update**: `ks-utility` moved from `v0.6.0` to `v0.9.0` (more languages, the translation tools; [ks-utility translation tools](https://github.com/kumasumit/ks-utility/blob/main/specs/translating.md)).
 
 # 2026-11-24
 
@@ -16,7 +20,7 @@
 
 # 2026-11-23
 
-* **Update**: Release: `.github/workflows/release.yml` now calls ks-utility's shared release workflow (`kotlin-app-release.yml@v0.4.0`, [spec](https://github.com/kumarsumit17/ks-utility/blob/main/specs/release-workflow.md)): one workflow for every Kotlin app, with a rehearsal input, pinned actions, signature checks, build-provenance attestations and `gh` publishing.
+* **Update**: Release: `.github/workflows/release.yml` now calls ks-utility's shared release workflow (`kotlin-app-release.yml@v0.4.0`, [spec](https://github.com/kumasumit/ks-utility/blob/main/specs/release-workflow.md)): one workflow for every Kotlin app, with a rehearsal input, pinned actions, signature checks, build-provenance attestations and `gh` publishing.
 * **Creation**: [App updates](app-updates.md) added: the App updates section shows the version and a Get the new version link to the GitHub releases page; no update check or download, because of the offline constraint.
 * **Update**: `ks-utility` moved to `v0.3.0`.
 

@@ -76,11 +76,11 @@ Threats this does **not** cover, said plainly in the spec and the app's About te
 
 ## English and Hindi
 
-Through ks-utility, as every suite app ([languages](https://github.com/kumarsumit17/ks-utility/blob/main/specs/languages.md)):
+Through ks-utility, as every suite app ([languages](https://github.com/kumasumit/ks-utility/blob/main/specs/languages.md)):
 
 - All interface text is in `mobile/android/src/main/lang/en.json` and `hi.json`, with the shared catalogue (`common.*`). The ks-utility tool turns them into Android string resources before each build and checks them as part of `check`.
 - Language: Same as the system, English or Hindi, through `AppCompatDelegate.setApplicationLocales` with `en` and `hi` in `locales_config.xml`.
-- Hindi follows the [Hindi style guide](https://github.com/kumarsumit17/ks-utility/blob/main/specs/hindi-style.md); dates and numbers use Latin digits.
+- Hindi follows the [Hindi style guide](https://github.com/kumasumit/ks-utility/blob/main/specs/hindi-style.md); dates and numbers use Latin digits.
 - ks-utility moves to `v0.6.0`.
 
 ## Code layout

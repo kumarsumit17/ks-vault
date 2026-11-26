@@ -1,7 +1,7 @@
 name: Release
 
 # The release workflow is shared by every KS-Suite Kotlin app and lives in ks-utility
-# (https://github.com/kumarsumit17/ks-utility/blob/main/specs/release-workflow.md).
+# (https://github.com/kumasumit/ks-utility/blob/main/specs/release-workflow.md).
 # This file only names KS Vault's platform: the Android phone app (no Google TV build).
 #
 #   Tag push android-vX.Y.Z       KS Vault's releases: builds and verifies the signed APK and AAB,
@@ -29,7 +29,7 @@ concurrency:
 
 jobs:
   release:
-    uses: kumarsumit17/ks-utility/.github/workflows/kotlin-app-release.yml@v0.10.1
+    uses: kumasumit/ks-utility/.github/workflows/kotlin-app-release.yml@v0.10.1
     permissions:
       contents: write
       id-token: write
