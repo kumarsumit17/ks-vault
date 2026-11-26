@@ -119,7 +119,7 @@ private fun Screen(r: Route, s: VaultSession.State.Unlocked, nav: Navigator, ses
                 Route.List -> ItemListScreen(s.vault, nav, session)
                 is Route.Detail -> ItemDetailScreen(s.vault, nav, session, r.id)
                 is Route.Edit -> ItemEditScreen(s.vault, nav, r.id, r.kind)
-                is Route.Viewer -> AttachmentViewer(s.vault, nav, r.attachmentId)
+                is Route.Viewer -> AttachmentViewer(s.vault, nav, session, r.attachmentId)
                 is Route.Camera -> CameraScreen(s.vault, nav, r.itemId)
                 Route.SaveShared -> SaveSharedScreen(s.vault, nav, session)
                 Route.Settings -> SettingsScreen(session, settings, nav)

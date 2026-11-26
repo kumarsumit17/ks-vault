@@ -71,6 +71,9 @@ interface VaultDao {
     @Query("DELETE FROM items")
     suspend fun deleteAllItems()
 
+    @Query("SELECT idExpires FROM items WHERE kind = 'ID_CARD' AND idExpires IS NOT NULL")
+    fun expiryDays(): Flow<List<Long>>
+
     @Query("SELECT COUNT(*) FROM items")
     suspend fun itemCount(): Int
 

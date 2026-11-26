@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +48,10 @@ import kotlinx.coroutines.launch
 /** A photo full screen (pinch to zoom), or a PDF's pages one under the other. Decrypted in memory only. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AttachmentViewer(vault: VaultRepository, nav: Navigator, attachmentId: Long) {
+fun AttachmentViewer(vault: VaultRepository, nav: Navigator, session: com.ks.vault.auth.VaultSession, attachmentId: Long) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var confirmShare by remember { mutableStateOf(false) }
+    val shareTitle = stringResource(R.string.share_out_title)
     val scope = rememberCoroutineScope()
     val attachment by produceState<Attachment?>(null, attachmentId) { value = vault.attachment(attachmentId) }
     val pages by produceState<List<Attachment>?>(null, attachment) {
@@ -66,6 +70,9 @@ fun AttachmentViewer(vault: VaultRepository, nav: Navigator, attachmentId: Long)
                     }
                 },
                 actions = {
+                    IconButton(onClick = { confirmShare = true }, enabled = attachment != null) {
+                        Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.share_out_file))
+                    }
                     IconButton(onClick = { confirmDelete = true }, enabled = attachment != null) {
                         Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.attach_delete))
                     }
@@ -88,6 +95,20 @@ fun AttachmentViewer(vault: VaultRepository, nav: Navigator, attachmentId: Long)
     }
 
     val a = attachment
+    if (confirmShare && a != null) {
+        AlertDialog(
+            onDismissRequest = { confirmShare = false },
+            title = { Text(stringResource(R.string.share_out_confirm_title)) },
+            text = { Text(stringResource(R.string.share_out_confirm_file)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmShare = false
+                    shareAttachment(context, session, a, shareTitle)
+                }) { Text(stringResource(R.string.share_out_button)) }
+            },
+            dismissButton = { TextButton(onClick = { confirmShare = false }) { Text(stringResource(R.string.common_cancel)) } },
+        )
+    }
     if (confirmDelete && a != null) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },

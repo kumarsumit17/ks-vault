@@ -19,7 +19,17 @@ class VaultSettings(context: Context) {
         _autoLock.value = minutes
     }
 
+    private val _reminders = MutableStateFlow(prefs.getBoolean(KEY_REMINDERS, false))
+    /** ID card expiry reminders; off until turned on. */
+    val reminders: StateFlow<Boolean> = _reminders
+
+    fun setReminders(on: Boolean) {
+        prefs.edit().putBoolean(KEY_REMINDERS, on).apply()
+        _reminders.value = on
+    }
+
     companion object {
+        private const val KEY_REMINDERS = "expiryReminders"
         val AUTO_LOCK_CHOICES = listOf(1, 2, 5, 10)
         const val DEFAULT_AUTO_LOCK = 2
         private const val KEY_AUTO_LOCK = "autoLockMinutes"

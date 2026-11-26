@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Long-press the app icon: "Search the vault" unlocks straight into the search field. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="search"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_search"
+        android:shortcutShortLabel="@string/shortcut_search"
+        android:shortcutLongLabel="@string/shortcut_search_long">
+        <intent
+            android:action="com.ks.vault.action.SEARCH"
+            android:targetPackage="com.ks.vault"
+            android:targetClass="com.ks.vault.MainActivity" />
+    </shortcut>
+</shortcuts>

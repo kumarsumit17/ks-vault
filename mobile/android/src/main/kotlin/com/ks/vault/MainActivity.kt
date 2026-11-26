@@ -36,6 +36,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Back in the vault (from a picker, the share sheet or the app shared to): the grace that kept
+        // it open ends here, so leaving again locks at once.
+        app.session.onForeground()
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         receiveShare(intent)
@@ -49,6 +56,12 @@ class MainActivity : AppCompatActivity() {
             else -> emptyList()
         }
         app.session.receiveShared(uris)
+        if (intent?.action == ACTION_SEARCH) app.session.searchRequested = true
+    }
+
+    companion object {
+        /** The home-screen shortcut "Search the vault" (res/xml/shortcuts.xml). */
+        const val ACTION_SEARCH = "com.ks.vault.action.SEARCH"
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {

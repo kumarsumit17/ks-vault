@@ -142,5 +142,8 @@ class VaultRepository(private val db: VaultDatabase, private val files: FileCiph
 
     suspend fun itemCount(): Int = dao.itemCount()
 
+    /** The expiry dates of every ID card, as they change. */
+    fun expiryDays(): Flow<List<Long>> = dao.expiryDays()
+
     fun close() = db.close()
 }

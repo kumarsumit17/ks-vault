@@ -96,6 +96,10 @@ fun SettingsScreen(session: VaultSession, settings: VaultSettings, nav: Navigato
             }
 
             Divider()
+            Section(stringResource(R.string.reminder_section))
+            ReminderSetting(settings)
+
+            Divider()
             Section(stringResource(R.string.settings_backup))
             Text(stringResource(R.string.settings_backup_hint), style = MaterialTheme.typography.bodySmall)
             Spacer(Modifier.height(8.dp))

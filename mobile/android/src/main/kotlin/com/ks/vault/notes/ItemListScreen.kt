@@ -37,7 +37,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -70,6 +74,14 @@ fun ItemListScreen(
     var query by remember { mutableStateOf("") }
     var kind by remember { mutableStateOf<ItemKind?>(null) }
     var addMenu by remember { mutableStateOf(false) }
+    val searchFocus = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        if (session.searchRequested) {
+            session.searchRequested = false
+            withFrameNanos { } // after the first frame, when the field exists
+            runCatching { searchFocus.requestFocus() }
+        }
+    }
     val items by remember(kind, query) { vault.items(kind, query) }.collectAsState(initial = null)
 
     Scaffold(
@@ -126,7 +138,7 @@ fun ItemListScreen(
                     }
                 },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).testTag("search"),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).focusRequester(searchFocus).testTag("search"),
             )
             Row(
                 Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),

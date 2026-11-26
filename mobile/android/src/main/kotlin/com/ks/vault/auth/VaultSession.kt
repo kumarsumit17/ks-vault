@@ -22,6 +22,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import com.ks.vault.reminders.ExpiryReminders
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -63,6 +65,7 @@ class VaultSession(private val context: Context, private val settings: VaultSett
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var idleJob: Job? = null
+    private var reminderJob: Job? = null
     @Volatile private var lastTouch = SystemClock.elapsedRealtime()
 
     /** Set while a picker the app opened is in front, so leaving the app for it does not lock. */
@@ -141,11 +144,20 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         lastTouch = SystemClock.elapsedRealtime()
         _state.value = State.Unlocked(repo, kind)
         startIdleTimer()
+        // While the vault is open, keep the expiry reminder times in step with the ID cards.
+        reminderJob?.cancel()
+        reminderJob = scope.launch {
+            combine(repo.expiryDays(), settings.reminders) { days, on -> days to on }.collect { (days, on) ->
+                withContext(Dispatchers.IO) { ExpiryReminders.update(context, on, days) }
+            }
+        }
     }
 
     /** Locks now: closes the database and forgets the repository. */
     fun lock() {
         idleJob?.cancel()
+        reminderJob?.cancel()
+        com.ks.vault.documents.ShareTokens.clear()
         externalUntil = 0
         val s = _state.value
         if (s is State.Unlocked) {
@@ -166,6 +178,7 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         withContext(Dispatchers.IO) {
             open?.close()
             disableBiometric()
+            ExpiryReminders.update(context, enabled = false, expiryDays = emptyList())
             keys.erase()
             context.deleteDatabase(VaultDatabase.NAME)
             File(context.noBackupFilesDir, "attachments").deleteRecursively()
@@ -275,6 +288,9 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         _shared.value = emptyList()
     }
 
+    /** The "Search the vault" shortcut was used: the list focuses its search field once. */
+    @Volatile var searchRequested = false
+
     /** Any touch or key press: the idle timer starts again. */
     fun touch() {
         lastTouch = SystemClock.elapsedRealtime()
@@ -296,9 +312,12 @@ class VaultSession(private val context: Context, private val settings: VaultSett
         lock()
     }
 
-    /** The app came back: lock if a picker grace ran out while away. */
+    /**
+     * The app came back: lock if the grace for a picker or a share ran out while away; otherwise the
+     * grace ends here, so leaving the app again locks at once.
+     */
     fun onForeground() {
-        if (externalUntil != 0L && SystemClock.elapsedRealtime() >= externalUntil) lock()
+        if (externalUntil != 0L && SystemClock.elapsedRealtime() >= externalUntil) lock() else externalDone()
     }
 
     private fun startIdleTimer() {

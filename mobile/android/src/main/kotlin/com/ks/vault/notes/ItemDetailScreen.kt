@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -55,6 +56,7 @@ import com.ks.vault.data.ItemKind
 import com.ks.vault.data.VaultRepository
 import com.ks.vault.documents.AttachmentImport
 import com.ks.vault.documents.AttachmentStrip
+import com.ks.vault.documents.shareText
 import com.ks.vault.ui.Clipboard
 import com.ks.vault.ui.Navigator
 import com.ks.vault.ui.Route
@@ -71,6 +73,8 @@ fun ItemDetailScreen(vault: VaultRepository, nav: Navigator, session: VaultSessi
     val item by remember(id) { vault.item(id) }.collectAsState(initial = null)
     val attachments by remember(id) { vault.attachments(id) }.collectAsState(initial = emptyList())
     var confirmDelete by remember { mutableStateOf(false) }
+    var confirmShare by remember { mutableStateOf(false) }
+    val shareTitle = stringResource(R.string.share_out_title)
     var importing by remember { mutableStateOf(false) }
 
     val errorTooLarge = stringResource(R.string.attach_too_large, AttachmentImport.MAX_MB.toString())
@@ -115,6 +119,9 @@ fun ItemDetailScreen(vault: VaultRepository, nav: Navigator, session: VaultSessi
                                 contentDescription = stringResource(if (current.pinned) R.string.item_unpin else R.string.item_pin),
                                 tint = if (current.pinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
                             )
+                        }
+                        IconButton(onClick = { confirmShare = true }, modifier = Modifier.testTag("shareItem")) {
+                            Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.share_out_item))
                         }
                         IconButton(onClick = { nav.go(Route.Edit(current.id, current.kind)) }, modifier = Modifier.testTag("edit")) {
                             Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.item_edit))
@@ -168,6 +175,23 @@ fun ItemDetailScreen(vault: VaultRepository, nav: Navigator, session: VaultSessi
             Spacer(Modifier.height(8.dp))
             Text(stringResource(R.string.attach_hint), style = MaterialTheme.typography.bodySmall)
         }
+    }
+
+    if (confirmShare && current != null) {
+        val text = (listOf(current.title) + fields(current).map { (l, v) -> "$l: $v" } + listOfNotNull(current.notes.takeIf { it.isNotBlank() }))
+            .joinToString("\n")
+        AlertDialog(
+            onDismissRequest = { confirmShare = false },
+            title = { Text(stringResource(R.string.share_out_confirm_title)) },
+            text = { Text(stringResource(R.string.share_out_confirm_text)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmShare = false
+                    shareText(context, text, shareTitle)
+                }, modifier = Modifier.testTag("confirmShare")) { Text(stringResource(R.string.share_out_button)) }
+            },
+            dismissButton = { TextButton(onClick = { confirmShare = false }) { Text(stringResource(R.string.common_cancel)) } },
+        )
     }
 
     if (confirmDelete && current != null) {

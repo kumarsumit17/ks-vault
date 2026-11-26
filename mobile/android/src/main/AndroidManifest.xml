@@ -8,6 +8,10 @@
          vault, encrypted). Not required, so phones without a camera can install it. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- ID card expiry reminders (off until turned on in Settings): a local notification, and the
+         alarm set again after a restart. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".VaultApp"
@@ -33,6 +37,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
+            <!-- The shortcut's own action ("Search the vault"); not exported beyond the launcher's explicit intent. -->
+            <intent-filter>
+                <action android:name="com.ks.vault.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <!-- "Save to KS Vault" in the share sheet: photos and PDFs, one or several. -->
             <intent-filter android:label="@string/share_target">
                 <action android:name="android.intent.action.SEND" />
@@ -42,6 +52,23 @@
                 <data android:mimeType="application/pdf" />
             </intent-filter>
         </activity>
+
+        <!-- Sharing an attachment out, after the user confirms: decrypted bytes through a pipe, never a
+             file. Not exported; the receiving app gets a one-time read grant. -->
+        <provider
+            android:name=".documents.VaultShareProvider"
+            android:authorities="com.ks.vault.share"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
+        <receiver android:name=".reminders.ReminderReceiver" android:exported="false" />
+        <!-- Exported only so the system can deliver BOOT_COMPLETED (a protected broadcast); it just
+             sets the reminder alarm again. -->
+        <receiver android:name=".reminders.ReminderBootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <!-- Keeps the language chosen in Settings on Android 12 and older (AppCompat). -->
         <service
