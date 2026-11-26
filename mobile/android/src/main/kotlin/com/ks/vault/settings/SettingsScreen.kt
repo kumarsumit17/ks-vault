@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -90,6 +91,15 @@ fun SettingsScreen(session: VaultSession, settings: VaultSettings, nav: Navigato
                         label = { Text(pluralStringResource(R.plurals.settings_minutes, m, m.toString())) },
                     )
                 }
+            }
+
+            Divider()
+            Section(stringResource(R.string.settings_backup))
+            Text(stringResource(R.string.settings_backup_hint), style = MaterialTheme.typography.bodySmall)
+            Spacer(Modifier.height(8.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = { nav.go(Route.Backup) }, modifier = Modifier.testTag("goBackup")) { Text(stringResource(R.string.backup_title)) }
+                OutlinedButton(onClick = { nav.go(Route.Restore) }) { Text(stringResource(R.string.restore_title)) }
             }
 
             Divider()

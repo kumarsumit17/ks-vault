@@ -1,6 +1,12 @@
 package com.ks.vault.data
 
+import androidx.room.withTransaction
+import com.ks.vault.backup.BackupAttachment
+import com.ks.vault.backup.BackupReader
+import com.ks.vault.backup.BackupWriter
 import com.ks.vault.crypto.FileCipher
+import java.io.InputStream
+import java.io.OutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -76,6 +82,65 @@ class VaultRepository(private val db: VaultDatabase, private val files: FileCiph
     suspend fun removeStrayFiles() = withContext(Dispatchers.IO) {
         files.deleteAllExcept(dao.allFileNames().toSet())
     }
+
+    /** Writes every item and attachment to [out] as a backup file sealed with [password]. Returns the item count. */
+    suspend fun backup(out: OutputStream, password: CharArray): Int = withContext(Dispatchers.IO) {
+        val items = dao.allItems()
+        BackupWriter(out, password).use { w ->
+            items.forEach(w::item)
+            dao.allAttachments().forEach { a ->
+                val bytes = files.read(a.fileName, a.fileKey)
+                w.attachment(BackupAttachment(a.id, a.itemId, a.parentId, a.page, a.name, a.mime, a.createdAt), bytes)
+                bytes.fill(0)
+            }
+        }
+        items.size
+    }
+
+    /**
+     * Restores a backup: adds its items to the vault, or first removes everything ([replace]). It all
+     * happens in one transaction: if the password is wrong or the file is damaged, nothing changes.
+     * Returns the number of items restored.
+     */
+    suspend fun restore(input: InputStream, password: CharArray, replace: Boolean): Int = withContext(Dispatchers.IO) {
+        val reader = BackupReader(input, password)
+        val oldFiles = if (replace) dao.allFileNames() else emptyList()
+        val newFiles = mutableListOf<String>()
+        var count = 0
+        try {
+            db.withTransaction {
+                if (replace) dao.deleteAllItems()
+                val itemIds = HashMap<Long, Long>()
+                val attachmentIds = HashMap<Long, Long>()
+                reader.read(
+                    onItem = { item ->
+                        itemIds[item.id] = dao.insert(item.copy(id = 0))
+                        count++
+                    },
+                    onAttachment = { a, bytes ->
+                        val itemId = itemIds[a.itemId] ?: return@read
+                        val stored = files.write(bytes)
+                        newFiles += stored.fileName
+                        attachmentIds[a.id] = dao.insert(
+                            Attachment(
+                                itemId = itemId, parentId = a.parentId?.let { attachmentIds[it] }, page = a.page, name = a.name,
+                                mime = a.mime, size = bytes.size.toLong(), fileName = stored.fileName, fileKey = stored.key, createdAt = a.createdAt,
+                            ),
+                        )
+                    },
+                )
+            }
+        } catch (e: Throwable) {
+            newFiles.forEach(files::delete)
+            throw e
+        } finally {
+            reader.close()
+        }
+        oldFiles.forEach(files::delete)
+        count
+    }
+
+    suspend fun itemCount(): Int = dao.itemCount()
 
     fun close() = db.close()
 }

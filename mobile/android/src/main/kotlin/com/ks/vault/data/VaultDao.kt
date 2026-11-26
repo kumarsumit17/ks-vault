@@ -61,6 +61,19 @@ interface VaultDao {
     @Query("SELECT fileName FROM attachments")
     suspend fun allFileNames(): List<String>
 
+    @Query("SELECT * FROM items ORDER BY id")
+    suspend fun allItems(): List<Item>
+
+    /** By id, so a PDF comes before its pages. */
+    @Query("SELECT * FROM attachments ORDER BY id")
+    suspend fun allAttachments(): List<Attachment>
+
+    @Query("DELETE FROM items")
+    suspend fun deleteAllItems()
+
+    @Query("SELECT COUNT(*) FROM items")
+    suspend fun itemCount(): Int
+
     @Insert
     suspend fun insert(attachment: Attachment): Long
 

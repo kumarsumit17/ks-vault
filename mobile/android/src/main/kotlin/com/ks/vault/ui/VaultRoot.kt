@@ -30,7 +30,9 @@ import com.ks.vault.documents.AttachmentViewer
 import com.ks.vault.notes.ItemDetailScreen
 import com.ks.vault.notes.ItemEditScreen
 import com.ks.vault.notes.ItemListScreen
+import com.ks.vault.settings.BackupScreen
 import com.ks.vault.settings.ChangeSecretScreen
+import com.ks.vault.settings.RestoreScreen
 import com.ks.vault.settings.SettingsScreen
 
 /** The screens of an open vault. Kept in memory only (never in saved state), and dropped on lock. */
@@ -41,6 +43,8 @@ sealed interface Route {
     data class Viewer(val attachmentId: Long) : Route
     data object Settings : Route
     data object ChangeSecret : Route
+    data object Backup : Route
+    data object Restore : Route
 }
 
 class Navigator {
@@ -106,5 +110,7 @@ private fun Screen(r: Route, s: VaultSession.State.Unlocked, nav: Navigator, ses
                 is Route.Viewer -> AttachmentViewer(s.vault, nav, r.attachmentId)
                 Route.Settings -> SettingsScreen(session, settings, nav)
                 Route.ChangeSecret -> ChangeSecretScreen(session, nav, s.kind)
+                Route.Backup -> BackupScreen(s.vault, session, nav)
+                Route.Restore -> RestoreScreen(s.vault, session, nav)
             }
 }

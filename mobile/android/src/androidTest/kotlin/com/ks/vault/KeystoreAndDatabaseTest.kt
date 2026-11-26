@@ -87,6 +87,39 @@ class KeystoreAndDatabaseTest {
         again.close()
     }
 
+    @Test fun backupRestoresIntoAnotherVault() = runBlocking {
+        val repo = VaultRepository(VaultDatabase.open(context, Aead.randomKey(), dbName), FileCipher(dir))
+        val id = repo.save(Item(kind = ItemKind.TICKET, title = "Pune trip", bookingRef = "4521367890"))
+        repo.addAttachment(id, "t.pdf", "application/pdf", byteArrayOf(1, 2), pages = listOf(byteArrayOf(3)))
+        val file = java.io.ByteArrayOutputStream().also { repo.backup(it, "backup-pass".toCharArray()) }.toByteArray()
+        repo.close()
+        context.deleteDatabase(dbName)
+        dir.deleteRecursively()
+
+        // A new vault (another key) with one item of its own.
+        val other = VaultRepository(VaultDatabase.open(context, Aead.randomKey(), dbName), FileCipher(dir))
+        other.save(Item(kind = ItemKind.NOTE, title = "Mine"))
+        // A wrong password changes nothing.
+        try {
+            other.restore(java.io.ByteArrayInputStream(file), "wrong-pass".toCharArray(), replace = true)
+            fail("expected WrongBackupPasswordException")
+        } catch (_: com.ks.vault.backup.WrongBackupPasswordException) {
+        }
+        assertEquals(1, other.itemCount())
+        // Add keeps what is there; the PDF and its page come back, encrypted again with new keys.
+        assertEquals(1, other.restore(java.io.ByteArrayInputStream(file), "backup-pass".toCharArray(), replace = false))
+        assertEquals(2, other.itemCount())
+        val restored = other.items(null, "4521367890").first().single()
+        val pdf = other.attachments(restored.id).first().single()
+        assertArrayEquals(byteArrayOf(1, 2), other.read(pdf))
+        assertArrayEquals(byteArrayOf(3), other.read(other.pages(pdf).single()))
+        // Replace leaves only the backup's items, and no stray files.
+        other.restore(java.io.ByteArrayInputStream(file), "backup-pass".toCharArray(), replace = true)
+        assertEquals(1, other.itemCount())
+        assertEquals(2, dir.listFiles()!!.size)
+        other.close()
+    }
+
     @Test fun attachmentsAreEncryptedAndDeletedWithTheirItem() = runBlocking {
         val repo = VaultRepository(VaultDatabase.open(context, Aead.randomKey(), dbName), FileCipher(dir))
         val id = repo.save(Item(kind = ItemKind.ID_CARD, title = "PAN"))
