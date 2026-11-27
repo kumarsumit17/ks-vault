@@ -39,5 +39,6 @@ jobs:
       app-name: ks-vault
       display-name: KS Vault
       android-module: ":mobile:android"   # phone only: no tv-module, no desktop
+      play-build-type: "play"             # the AAB is the Google Play build (no GitHub update link)
       node: true                          # the ks-utility language tool runs before each build
     secrets: inherit

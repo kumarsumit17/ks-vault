@@ -8,15 +8,13 @@ import com.ks.vault.auth.VaultSession
 import com.ks.vault.auth.VaultSettings
 
 class VaultApp : Application() {
-    lateinit var settings: VaultSettings
-        private set
-    lateinit var session: VaultSession
-        private set
+    // Made on first use, not at process start: before the phone's first unlock after a restart,
+    // Android's credential-encrypted storage (the settings) cannot be read yet.
+    val settings: VaultSettings by lazy { VaultSettings(this) }
+    val session: VaultSession by lazy { VaultSession(this, settings) }
 
     override fun onCreate() {
         super.onCreate()
-        settings = VaultSettings(this)
-        session = VaultSession(this, settings)
         // Lock when the whole app leaves the screen (home, another app, screen off).
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) = session.onForeground()

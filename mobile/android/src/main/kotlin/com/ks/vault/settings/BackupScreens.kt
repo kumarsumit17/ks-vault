@@ -128,8 +128,7 @@ fun BackupScreen(vault: VaultRepository, session: VaultSession, nav: Navigator) 
         if (busy) {
             CircularProgressIndicator()
             Text(stringResource(R.string.backup_working))
-            return@BackupLayout
-        }
+        } else {
         PasswordField(stringResource(R.string.backup_password), first, { first = it; message = null }, "backupPassword")
         PasswordField(stringResource(R.string.backup_password_again), second, { second = it; message = null }, "backupPasswordAgain")
         Button(
@@ -149,6 +148,7 @@ fun BackupScreen(vault: VaultRepository, session: VaultSession, nav: Navigator) 
             modifier = Modifier.fillMaxWidth().testTag("backupChoose"),
         ) { Text(stringResource(R.string.backup_choose)) }
         message?.let { Text(it, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("backupMessage")) }
+        }
     }
 }
 
@@ -202,8 +202,7 @@ fun RestoreScreen(vault: VaultRepository, session: VaultSession, nav: Navigator)
         if (busy) {
             CircularProgressIndicator()
             Text(stringResource(R.string.restore_working))
-            return@BackupLayout
-        }
+        } else {
         OutlinedButton(onClick = {
             session.expectExternal()
             open.launch(arrayOf("*/*"))
@@ -219,6 +218,7 @@ fun RestoreScreen(vault: VaultRepository, session: VaultSession, nav: Navigator)
             }
         }
         message?.let { Text(it, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("restoreMessage")) }
+        }
     }
 
     if (confirmReplace) {

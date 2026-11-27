@@ -104,8 +104,7 @@ fun CameraScreen(vault: VaultRepository, nav: Navigator, itemId: Long) {
                     modifier = Modifier.padding(24.dp),
                     style = MaterialTheme.typography.bodyLarge,
                 )
-                return@Column
-            }
+            } else {
             Box(Modifier.weight(1f).fillMaxWidth().background(Color.Black), contentAlignment = Alignment.Center) {
                 AndroidView(
                     factory = { ctx ->
@@ -141,6 +140,7 @@ fun CameraScreen(vault: VaultRepository, nav: Navigator, itemId: Long) {
                 enabled = !busy,
                 modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("shutter"),
             ) { Text(stringResource(R.string.camera_take)) }
+            }
         }
     }
     DisposableEffect(Unit) {

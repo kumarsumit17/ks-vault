@@ -1,3 +1,8 @@
+# 2026-11-27
+
+* **Creation**: [Google Play readiness](google-play.md) added and built: a `play` build type for the AAB (no GitHub update link; Settings says updates come through Google Play), `PRIVACY.md` (English and Hindi), the store listing in English and Hindi with screenshots, icon and feature graphic made by a test; the release workflow builds the AAB from it (`play-build-type: "play"`). The Play Console steps are the owner's.
+* **Update**: Fixes found while checking the known Compose crash: no early `return` inside composable lambdas any more (the likely cause of the crash while disposing a `Scaffold`; none in eight full runs since); the app no longer reads its settings at process start, so it cannot crash before the phone's first unlock; the reminder device test waits for Android's asynchronous notification posting and cancelling.
+
 # 2026-11-26
 
 * **Update**: The workspace repository is now `kumasumit/ks-suite` (landing page https://kumasumit.github.io/ks-suite/): links in the README, `CLAUDE.md` and [Per-platform optimization plan](plan-per-platform.md) updated.

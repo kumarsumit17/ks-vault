@@ -135,6 +135,7 @@
     "other": "{count} minutes"
   },
   "settings.updateOffline": "KS Vault never goes online, so it does not check for updates. The button opens the download page in your browser.",
+  "settings.updatePlay": "Updates come through Google Play. KS Vault itself never goes online.",
   "settings.backup": "Backup",
   "settings.backupHint": "Nothing leaves the phone by itself. A backup is a file you save where you choose, locked with its own password, so you can restore it on a new phone.",
   "backup.title": "Back up to a file",

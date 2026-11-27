@@ -134,8 +134,7 @@ fun ItemDetailScreen(vault: VaultRepository, nav: Navigator, session: VaultSessi
             )
         },
     ) { padding ->
-        if (current == null) return@Scaffold
-        Column(
+        if (current != null) Column(
             Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         ) {
             Text(current.kind.label(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)

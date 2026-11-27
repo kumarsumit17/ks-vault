@@ -100,8 +100,7 @@ fun ItemEditScreen(vault: VaultRepository, nav: Navigator, id: Long?, kind: Item
             )
         },
     ) { padding ->
-        if (!loaded) return@Scaffold
-        Column(
+        if (loaded) Column(
             Modifier.padding(padding).fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

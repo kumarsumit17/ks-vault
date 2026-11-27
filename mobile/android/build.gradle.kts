@@ -38,6 +38,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Phones (arm64, 32-bit ARM) and x86_64 emulators and Chromebooks. 32-bit x86 is left out:
         // only very old emulators use it (specs/plan-per-platform.md, decision 2).
+        buildConfigField("boolean", "PLAY_BUILD", "false")
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
 
@@ -58,6 +59,13 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.findByName("release")
+        }
+        // The Google Play build (the AAB): the release build without the GitHub "Get the new version"
+        // button, which Play does not allow (specs/google-play.md).
+        create("play") {
+            initWith(getByName("release"))
+            matchingFallbacks += "release"
+            buildConfigField("boolean", "PLAY_BUILD", "true")
         }
     }
 

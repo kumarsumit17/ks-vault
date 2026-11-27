@@ -1,0 +1,13 @@
+KS Vault keeps your notes, ID cards and tickets on your phone, encrypted, behind a pattern or password. It never goes online: it has no internet permission at all.
+
+• Notes, ID cards (Aadhaar, PAN, passport, driving licence, voter ID and more) and tickets (train, flight, bus, events) with their own fields
+• Photos and PDFs on any item: take a photo inside the app, add from the gallery or files, or share into KS Vault from another app
+• Search everything as you type; pin what you use most; copy a number with one tap (cleared from the clipboard after a minute)
+• Unlock with a password or pattern, or with your fingerprint or face
+• Locks as soon as you leave the app and after a short idle time; longer waits after wrong tries
+• No screenshots or screen recording of the vault, and a blank preview in recent apps
+• Encrypted backup to a file you choose, with its own password, to restore on a new phone
+• Optional reminder before an ID card expires
+• English and Hindi
+
+Your data is encrypted with AES-256 and a key that needs both your secret and your phone's secure hardware. Nothing is collected, nothing is sent, there are no ads and no accounts.

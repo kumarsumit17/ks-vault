@@ -136,6 +136,10 @@ fun SettingsScreen(session: VaultSession, settings: VaultSettings, nav: Navigato
                 else stringResource(R.string.common_app_update_current, version),
                 style = MaterialTheme.typography.bodyMedium,
             )
+            if (BuildConfig.PLAY_BUILD) {
+                // Google Play updates the app; Play does not allow pointing to another download.
+                Text(stringResource(R.string.settings_update_play), style = MaterialTheme.typography.bodySmall)
+            } else {
             Text(stringResource(R.string.settings_update_offline), style = MaterialTheme.typography.bodySmall)
             Spacer(Modifier.height(8.dp))
             OutlinedButton(onClick = {
@@ -145,6 +149,7 @@ fun SettingsScreen(session: VaultSession, settings: VaultSettings, nav: Navigato
                 } catch (_: ActivityNotFoundException) {
                 }
             }) { Text(stringResource(R.string.common_app_update_get_button)) }
+            }
 
             Divider()
             Section(stringResource(R.string.settings_about))

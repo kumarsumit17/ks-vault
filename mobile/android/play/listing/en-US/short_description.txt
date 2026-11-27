@@ -1,0 +1,1 @@
+Offline vault for notes, ID cards and tickets, locked by pattern or password.

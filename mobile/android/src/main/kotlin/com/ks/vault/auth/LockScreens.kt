@@ -168,8 +168,7 @@ fun ChooseSecret(title: String, intro: String?, busy: Boolean, onChosen: (CharAr
     LockLayout(title, if (busy) stringResource(R.string.lock_working) else message) {
         if (busy) {
             CircularProgressIndicator()
-            return@LockLayout
-        }
+        } else {
         // The kind stays on screen (fixed while confirming), so the entry does not move between the two tries.
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
@@ -205,6 +204,7 @@ fun ChooseSecret(title: String, intro: String?, busy: Boolean, onChosen: (CharAr
             },
         )
         extra()
+        }
     }
 }
 
