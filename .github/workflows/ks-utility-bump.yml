@@ -15,9 +15,12 @@ permissions: {}
 jobs:
   bump:
     permissions: { contents: write, issues: write }
-    uses: kumasumit/ks-utility/.github/workflows/ks-utility-bump.yml@v0.15.0
+    uses: kumasumit/ks-utility/.github/workflows/ks-utility-bump.yml@v0.16.0
     with:
       kind: kotlin
       java: true
       node-version: "24"                  # the ks-utility language tool runs before each build
       test: ./gradlew :mobile:android:testDebugUnitTest :mobile:android:checkLanguageFiles
+    # Lets an automatic move also rewrite the @vX references to ks-utility's workflows.
+    secrets:
+      KS_WORKFLOWS_TOKEN: ${{ secrets.KS_WORKFLOWS_TOKEN }}
