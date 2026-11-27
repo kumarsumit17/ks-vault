@@ -1,0 +1,23 @@
+name: Move to the newest ks-utility
+
+# Every KS-Suite app uses ks-utility's newest tag. When ks-utility releases (or once a day, in case a
+# notice was missed), ks-utility's shared bump workflow moves the submodule to the newest tag in its
+# own commit, runs these tests and pushes it to dev (ks-utility specs/release-workflow.md).
+on:
+  repository_dispatch:
+    types: [ks-utility-released]
+  schedule:
+    - cron: "17 4 * * *"   # daily, in case a notice was missed
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  bump:
+    permissions: { contents: write, issues: write }
+    uses: kumasumit/ks-utility/.github/workflows/ks-utility-bump.yml@v0.15.0
+    with:
+      kind: kotlin
+      java: true
+      node-version: "24"                  # the ks-utility language tool runs before each build
+      test: ./gradlew :mobile:android:testDebugUnitTest :mobile:android:checkLanguageFiles
