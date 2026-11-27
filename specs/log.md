@@ -1,5 +1,6 @@
 # 2026-11-27
 
+* **Update**: `ks-utility` moved to `v0.18.0`; `release.yml` and `ks-utility-bump.yml` now call ks-utility's workflows at `@main`, which is always its newest release (owner's decision, KS-Suite aa0ea92), so only the code pin moves with each new tag.
 * **Update**: `ks-utility-bump.yml` no longer passes `KS_WORKFLOWS_TOKEN` (owner's decision, KS-Suite aa0ea92: apps will call ks-utility's workflows at `@main`, so only the code pin moves).
 * **Update**: `ks-utility` moved to `v0.17.0` and both workflows call it (`ks-suite-check` passes; nothing KS Vault uses changed).
 * **Update**: `ks-utility` moved to `v0.16.0` (`ks-suite-check` passes; it also requires every reference to ks-utility's workflows to be the newest tag); the release workflow calls `kotlin-app-release.yml@v0.16.0`; new `.github/workflows/ks-utility-bump.yml` moves the pin to each new ks-utility tag by itself (with Node for the language tool, KS Vault's unit tests and language check, and `KS_WORKFLOWS_TOKEN` so it can also rewrite the workflow references). `android-v1.4.2` was never released: its run stopped because v0.16.0 came out between the test and the tag.
