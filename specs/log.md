@@ -1,5 +1,6 @@
 # 2026-11-27
 
+* **Update**: `ks-utility` moved to `v0.18.1` by hand: the automatic bump runs for v0.17.0, v0.18.0 and v0.18.1 passed KS Vault's tests but failed at their own commit step (reported to ks-utility); their issues are closed.
 * **Update**: `ks-utility` moved to `v0.18.0`; `release.yml` and `ks-utility-bump.yml` now call ks-utility's workflows at `@main`, which is always its newest release (owner's decision, KS-Suite aa0ea92), so only the code pin moves with each new tag.
 * **Update**: `ks-utility-bump.yml` no longer passes `KS_WORKFLOWS_TOKEN` (owner's decision, KS-Suite aa0ea92: apps will call ks-utility's workflows at `@main`, so only the code pin moves).
 * **Update**: `ks-utility` moved to `v0.17.0` and both workflows call it (`ks-suite-check` passes; nothing KS Vault uses changed).
