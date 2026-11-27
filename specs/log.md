@@ -1,5 +1,6 @@
 # 2026-11-27
 
+* **Update**: `ks-utility` moved to `v0.18.3`. `android-v1.4.4` was never released: its CI run could not download the Kotlin Gradle plugin for the ks-utility build (a passing failure; nothing had changed), and v0.18.3 came out before a re-run.
 * **Update**: `ks-utility` moved to `v0.18.2`. The failed automatic bumps came from `main`, which still had the bump caller at `@v0.16.0` (scheduled and dispatched runs use the default branch's workflow file); releasing `android-v1.4.4` brings `main` to the `@main` callers.
 * **Update**: `ks-utility` moved to `v0.18.1` by hand: the automatic bump runs for v0.17.0, v0.18.0 and v0.18.1 passed KS Vault's tests but failed at their own commit step (reported to ks-utility); their issues are closed.
 * **Update**: `ks-utility` moved to `v0.18.0`; `release.yml` and `ks-utility-bump.yml` now call ks-utility's workflows at `@main`, which is always its newest release (owner's decision, KS-Suite aa0ea92), so only the code pin moves with each new tag.
