@@ -15,7 +15,7 @@ permissions: {}
 jobs:
   bump:
     permissions: { contents: write, issues: write }
-    uses: kumasumit/ks-utility/.github/workflows/ks-utility-bump.yml@v0.16.0
+    uses: kumasumit/ks-utility/.github/workflows/ks-utility-bump.yml@v0.17.0
     with:
       kind: kotlin
       java: true
